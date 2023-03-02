@@ -1,4 +1,42 @@
-Kirikiroid2 - A cross-platform port of Kirikiri2/KirikiriZ
+# Krikiroid2-Yuri
+
+A krikiroid2 project matained by Yurisizuku.  
+Support the newer android device and more format.  
+Windows or linux will also be supported (in future).
+
+New features :  
+
+- develop  
+  - [x] clear camke project structure
+  - [x] well documention for develop and usage
+  - [x] scripts to compile or cross compile without pain
+  - [x] vscode and android studio project for multi enviroment
+  - [ ] ci in github action to automaticly build
+- platform
+  - android
+    - [x] SDK level above 21 (android 5.1, Lolipop)
+    - [ ] SAF to access extern sdcard
+  - windows
+  - linux
+- render  
+- game support
+
+## 1. usage
+
+## 2. Build  
+
+I add some futures by reverse engine before, and now this project can be build from source.  
+In windows, you must use msys2 to build ffmpeg port.  
+
+## 3. Issues (including solved)
+
+## 4. Todo
+
+original information about kirikiroid2.  
+___
+
+## Kirikiroid2 - A cross-platform port of Kirikiri2/KirikiriZ  
+
 ==========================================================
 
 Based on most code from [Kirikiri2](http://kikyou.info/tvp/) and [KirikiriZ](https://github.com/krkrz/krkrz)

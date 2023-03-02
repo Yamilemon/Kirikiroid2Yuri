@@ -1,0 +1,23 @@
+# general
+build/**
+build_*/**
+thirdparty/build/**
+thirdparty/port/**
+
+# android
+local.properties
+sign.properties
+project/onsyuri_android/.gradle
+project/android/local.properties
+project/android/.idea/caches
+project/android/.idea/libraries
+project/android/.idea/modules.xml
+project/android/.idea/workspace.xml
+project/android/.idea/navEditor.xml
+project/android/.idea/assetWizardSettings.xml
+project/android/.idea/deploymentTargetDropDown.xml
+project/android/.idea/inspectionProfiles
+project/android/app/cpp/thirdparty/**
+project/android/app/.cxx/**
+project/android/app/debug/**
+project/android/app/release/**

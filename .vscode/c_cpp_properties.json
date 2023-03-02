@@ -1,0 +1,24 @@
+{
+    "env": { // edit your env here
+        "androidsdk": "D:/Software/env/sdk/androidsdk",
+        "androidndk": "${androidsdk}/ndk/25.2.9519653"
+    },
+    "configurations": [
+        {
+            "name": "Android (win)",
+            "includePath": [
+                "${workspaceFolder}/src/core/**",
+                "${workspaceFolder}/thirdparty/build/arch_androida64/include",
+                "${workspaceFolder}/thirdparty/port/oniguruma/src/**",
+                "${workspaceFolder}/thirdparty/port/ffmpeg/**"
+            ],
+            "defines": [
+                "__linux__"
+            ],
+            "compilerPath": "${androidndk}/toolchains/llvm/prebuilt/windows-x86_64/bin/clang.exe",
+            "intelliSenseMode": "linux-clang-arm64",
+            "compilerArgs": ["--target=aarch64-linux-android21"]
+        }
+    ],
+    "version": 4
+}

@@ -1,0 +1,99 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+        "configurations": [
+        {
+            "name": "Win32 cppdbg",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/build_mingw32/onsyuri.exe",
+            "args": ["--debug:0", // "--fullscreen2",
+                // "--width", "960", "--height", "544", 
+                "--sharpness", "12.1",  
+                "--root", "test", "--font", "test/default.ttf", "--save-dir", "${workspaceRoot}\\build_mingw32"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/asset",
+            "environment": [
+                {"name": "msys2sdk", "value": "D:/Software/env/msys2"},
+            ],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/Software/env/msys2/mingw32/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "cppdbg GDB launch (Windows) start!",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }, 
+            ]
+        },
+        {
+            "name": "Win64 cppdbg",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/build_mingw64/onsyuri.exe",
+            "args": ["--debug:0", // "--fullscreen2",
+                // "--width", "960", "--height", "544", 
+                "--sharpness", "1.1",  
+                "--root", "test", "--font", "test/default.ttf", "--save-dir", "${workspaceFolder}/save"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/asset",
+            "environment": [
+                {"name": "msys2sdk", "value": "D:/Software/env/msys2"},
+            ],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "miDebuggerPath": "D:/Software/env/msys2/mingw64/bin/gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "cppdbg GDB launch (Windows) start!",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }, 
+            ]
+        },
+
+        {
+            "name": "Linux32 cppdbg",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build_linux32/onsyuri",
+            "args": ["--debug:0", "--width", "960", "--height", "544", 
+                "--root", "test", "--font", "test/default.ttf", "--save-dir", "${workspaceFolder}/save"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/asset",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+            ]
+        },
+        {
+            "name": "Linux64 cppdbg",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build_linux64/onsyuri",
+            "args": ["--debug:0", "--width", "960", "--height", "544", 
+                "--root", "test", "--font", "test/default.ttf", "--save-dir", "${workspaceFolder}/save"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/asset",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+            ]
+        }
+    ]
+}
