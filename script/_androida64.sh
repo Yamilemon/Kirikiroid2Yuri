@@ -117,3 +117,103 @@ build_ffmpeg()
     make -j$CORE_NUM &&  make install
     popd
 }
+
+
+build_lz4()
+{
+    pushd $LZ4_SRC
+    make clean
+    make lib -j$CORE_NUM \
+        CC=aarch64-linux-android21-clang \
+        CXX=aarch64-linux-android21-clang++ \
+        AR=llvm-ar STRIP=llvm-strip \
+        WINBASED=no
+    mv lib/*.a $PORTBUILD_PATH/lib
+    popd
+}
+
+build_archive()
+{
+    if ! [ -d $ARCHIVE_SRC/build_$PLATFORM ]; then mkdir -p $ARCHIVE_SRC/build_$PLATFORM ;fi
+    cp $CMAKELISTS_PATH/thirdparty/patch/android_android_lf.h  $ARCHIVE_SRC/libarchive/android_lf.h
+    pushd $ARCHIVE_SRC/build_$PLATFORM
+    cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
+        -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
+        -DENABLE_OPENSSL=OFF -DENABLE_TEST=OFF \
+        -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH
+    make -j$CORE_NUM &&  make install
+    popd
+}
+
+build_opencv()
+{
+    if ! [ -d $OPENCV_SRC/build_$PLATFORM ]; then mkdir -p $OPENCV_SRC/build_$PLATFORM ;fi
+    pushd $OPENCV_SRC/build_$PLATFORM
+    cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
+        -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
+        -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH \
+        -DWITH_CUDA=OFF -DWITH_MATLAB=OFF -DBUILD_ANDROID_EXAMPLES=OFF \
+        -DBUILD_DOCS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_TESTS=OFF \
+        -DBUILD_opencv_video=OFF -DBUILD_opencv_videoio=OFF -DBUILD_opencv_features2d=OFF \
+        -DBUILD_opencv_flann=OFF -DBUILD_opencv_highgui=OFF -DBUILD_opencv_ml=OFF \
+        -DBUILD_opencv_dnn=OFF -DBUILD_opencv_gapi=OFF -DBUILD_opencv_hal=ON \
+        -DBUILD_opencv_photo=OFF -DBUILD_opencv_python=OFF -DBUILD_opencv_shape=OFF \
+        -DBUILD_opencv_stitching=OFF -DBUILD_opencv_superres=OFF \
+        -DBUILD_opencv_ts=OFF -DBUILD_opencv_videostab=OFF -DBUILD_ANDROID_PROJECTS=OFF
+    make -j$CORE_NUM &&  make install # sdk/staticlibs/arm64-v8a
+    popd
+}
+
+build_openal()
+{
+    if ! [ -d $OPENAL_SRC/build_$PLATFORM ]; then mkdir -p $OPENAL_SRC/build_$PLATFORM ;fi
+    pushd $OPENAL_SRC/build_$PLATFORM
+    cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
+        -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
+        -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH 
+    make -j$CORE_NUM &&  make install 
+    popd
+}
+
+build_oniguruma()
+{
+    if ! [ -d $ONIGURUMA_SRC/build_$PLATFORM ]; then mkdir -p $ONIGURUMA_SRC/build_$PLATFORM ;fi
+    pushd $ONIGURUMA_SRC/build_$PLATFORM
+    cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
+        -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
+        -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH 
+    make -j$CORE_NUM &&  make install 
+    popd
+}
+
+build_sdl2()
+{
+    if ! [ -d $SDL2_SRC/build_$PLATFORM ]; then mkdir -p $SDL2_SRC/build_$PLATFORM ;fi
+    cp $CMAKELISTS_PATH/thirdparty/patch/android_SDL_android.c  $SDL2_SRC/src/core/android/SDL_android.c
+    pushd $SDL2_SRC/build_$PLATFORM
+    cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
+        -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
+        -DANDROID=ON -DCMAKE_SYSTEM_NAME=Linux \
+        -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH \
+        -DHIDAPI=OFF -DHAVE_GCC_WDECLARATION_AFTER_STATEMENT=OFF
+    make -j$CORE_NUM &&  make install 
+    popd
+}
+
+build_cocos2dx()
+{
+    if ! [ -d $COCOS2DX_SRC/platform/build_$PLATFORM ]; then mkdir -p $COCOS2DX_SRC/build_$PLATFORM ;fi
+    git apply  $CMAKELISTS_PATH/thirdparty/patch/android_cocos2dx.diff
+    pushd $COCOS2DX_SRC/build_$PLATFORM
+    cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
+        -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
+        -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH
+    # make -j$CORE_NUM &&  make install 
+    popd
+}

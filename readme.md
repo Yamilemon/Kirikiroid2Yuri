@@ -25,15 +25,25 @@ New features :
 
 ## 2. Build  
 
-I add some futures by reverse engine before, and now this project can be build from source.  
-In windows, you must use msys2 to build ffmpeg port.  
+I add some futures by reverse engine before, and now this project can be build from source.  In windows, you must use msys2 to build ffmpeg port.  
 
-## 3. Issues (including solved)
+prepare:
 
-## 4. Todo
+- wget, git, make, cmake, msys2 (if windows)  
+- android sdk with `ANDROID_HOME` variable in env  
+- ndk 25.2.9519653  
 
-original information about kirikiroid2.  
+## 3. Compatibility  
+
+|game|version|status|description|
+|----|-------|------|-----------|
+
+## 4. Issues (including solved)
+
+## 5. Todo
+
 ___
+Original information about kirikiroid2 bellow, also refered the dependencies from [ningshanwutuobang](https://github.com/ningshanwutuobang/Kirikiroid2).  
 
 ## Kirikiroid2 - A cross-platform port of Kirikiri2/KirikiriZ  
 

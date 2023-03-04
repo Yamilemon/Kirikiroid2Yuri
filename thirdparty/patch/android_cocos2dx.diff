@@ -1,0 +1,22 @@
+diff --git a/cocos/platform/android/java/src/org/cocos2dx/lib/Cocos2dxActivity.java b/cocos/platform/android/java/src/org/cocos2dx/lib/Cocos2dxActivity.java
+index 22ad92a..32e40fc 100644
+--- a/cocos/platform/android/java/src/org/cocos2dx/lib/Cocos2dxActivity.java
++++ b/cocos/platform/android/java/src/org/cocos2dx/lib/Cocos2dxActivity.java
+@@ -63,7 +63,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
+     // ===========================================================
+     
+     private Cocos2dxGLSurfaceView mGLSurfaceView = null;
+-    private int[] mGLContextAttrs = null;
++    protected int[] mGLContextAttrs = null;
+     private Cocos2dxHandler mHandler = null;   
+     private static Cocos2dxActivity sContext = null;
+     private Cocos2dxVideoHelper mVideoHelper = null;
+@@ -380,7 +380,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
+     // Inner and Anonymous Classes
+     // ===========================================================
+ 
+-    private class Cocos2dxEGLConfigChooser implements GLSurfaceView.EGLConfigChooser
++    protected class Cocos2dxEGLConfigChooser implements GLSurfaceView.EGLConfigChooser
+     {
+         private int[] mConfigAttributes;
+         private  final int EGL_OPENGL_ES2_BIT = 0x04;

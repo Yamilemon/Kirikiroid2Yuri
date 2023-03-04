@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -120,7 +121,7 @@ public class MediaStoreHack {
             return resolver.insert(MediaStore.Files.getContentUri("external"), values);
         }
         else {
-            int imageId = filecursor.getInt(filecursor.getColumnIndex(BaseColumns._ID));
+            @SuppressLint("Range") int imageId = filecursor.getInt(filecursor.getColumnIndex(BaseColumns._ID));
             Uri uri = MediaStore.Files.getContentUri("external").buildUpon().appendPath(
                     Integer.toString(imageId)).build();
             filecursor.close();

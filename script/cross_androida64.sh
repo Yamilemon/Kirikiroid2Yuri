@@ -28,6 +28,7 @@ function fetch_ports()
     fetch_oboe
     fetch_bpg
     fetch_jxr
+    fetch_cocos2dx
 }
 
 function build_ports()
@@ -39,7 +40,14 @@ function build_ports()
     # build_unrar
     # build_breakpad
     # build_jpegturbo
-    build_ffmpeg
+    # build_ffmpeg
+    # build_lz4
+    # build_archive
+    # build_opencv
+    # build_openal
+    # build_oniguruma
+    # build_sdl2
+    build_cocos2dx
 }
 
 # prepare env, tested with ndk 25.2.9519653

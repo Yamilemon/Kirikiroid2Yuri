@@ -1,20 +1,7 @@
 package org.tvp.kirikiri2;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import org.cocos2dx.lib.Cocos2dxActivity;
-import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
-
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -42,8 +29,8 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.provider.Settings.Secure;
-import android.support.annotation.NonNull;
-import android.support.v4.provider.DocumentFile;
+// import android.support.annotation.NonNull;
+// import android.support.v4.provider.DocumentFile;
 import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -58,8 +45,25 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+
+import org.cocos2dx.lib.Cocos2dxActivity;
+import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.documentfile.provider.DocumentFile;
 
 /**
  * Utility class for handling the media store.
@@ -80,7 +84,7 @@ abstract class MediaStoreUtil {
             return resolver.insert(MediaStore.Files.getContentUri("external"), values);
         }
         else {
-            int imageId = filecursor.getInt(filecursor.getColumnIndex(BaseColumns._ID));
+            @SuppressLint("Range") int imageId = filecursor.getInt(filecursor.getColumnIndex(BaseColumns._ID));
             Uri uri = MediaStore.Files.getContentUri("external").buildUpon().appendPath(
                     Integer.toString(imageId)).build();
             filecursor.close();
@@ -247,7 +251,11 @@ class SDLInputConnection extends BaseInputConnection {
     }
 }
 
-public class KR2Activity extends Cocos2dxActivity {
+public class KR2Activity extends Cocos2dxActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
+
+    public static final int RC_WRITE_EXTERNAL = 1;
+    public static final int RC_PHONE_STATE = 2;
+
 	static ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
 	static ActivityManager mAcitivityManager = null;
 	static Debug.MemoryInfo mDbgMemoryInfo = new Debug.MemoryInfo();
@@ -266,8 +274,58 @@ public class KR2Activity extends Cocos2dxActivity {
 	public static long getUsedMemory() {
 		return mDbgMemoryInfo.getTotalPss(); // in kB
 	}
-	
-	static public String getDeviceId() {
+
+    private static void requestPhoneState() {
+        // Permission has not been granted and must be requested.
+        if (ActivityCompat.shouldShowRequestPermissionRationale(sInstance,
+                Manifest.permission.READ_PHONE_STATE)) {
+            // Provide an additional rationale to the user if the permission was not granted
+            // and the user would benefit from additional context for the use of the permission.
+            // Display a SnackBar with cda button to request the missing permission.
+            ActivityCompat.requestPermissions(sInstance,
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    RC_PHONE_STATE);
+
+        } else {
+            // Request the permission. The result will be received in onRequestPermissionResult().
+            ActivityCompat.requestPermissions(sInstance,
+                    new String[]{Manifest.permission.READ_PHONE_STATE}, RC_PHONE_STATE);
+        }
+    }
+
+    private static void requestExternalWrite() {
+        // Permission has not been granted and must be requested.
+        if (ActivityCompat.shouldShowRequestPermissionRationale(sInstance,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            // Provide an additional rationale to the user if the permission was not granted
+            // and the user would benefit from additional context for the use of the permission.
+            // Display a SnackBar with cda button to request the missing permission.
+            ActivityCompat.requestPermissions(sInstance,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    RC_WRITE_EXTERNAL);
+
+        } else {
+            // Request the permission. The result will be received in onRequestPermissionResult().
+            ActivityCompat.requestPermissions(sInstance,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, RC_WRITE_EXTERNAL);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case RC_PHONE_STATE:
+                Log.d("Krkr2", "onRequestPermissionsResult: PHONE STATE");
+                break;
+            case RC_WRITE_EXTERNAL:
+                Log.d("Krkr2", "onRequestPermissionsResult: WRITE EXTERNAL");
+                break;
+        }
+    }
+
+
+    static public String getDeviceId() {
 		TelephonyManager mgr = (TelephonyManager)GetInstance().getSystemService(Context.TELEPHONY_SERVICE);
 		String DeviceID = mgr.getDeviceId();
 		if(DeviceID != null) {
@@ -287,8 +345,10 @@ public class KR2Activity extends Cocos2dxActivity {
 	static public KR2Activity GetInstance() {return sInstance;}
 
     static {
-		System.loadLibrary("ffmpeg");
+	//	System.loadLibrary("ffmpeg");
 	//	System.loadLibrary("game");
+        System.loadLibrary("openal");
+        System.loadLibrary("hidapi");
     }
     
 	@Override
@@ -305,6 +365,9 @@ public class KR2Activity extends Cocos2dxActivity {
 			}
 		}
 		*/
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestExternalWrite();
+        }
 		initDump(this.getFilesDir().getAbsolutePath() + "/dump");
 	}
 	
@@ -811,12 +874,27 @@ public class KR2Activity extends Cocos2dxActivity {
 
         return result;
     }
-    
+
+    static final boolean isWritableNormal(final String path) {
+        boolean ret = isWritableNormalOrSaf(path);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestExternalWrite();
+            return isWritableNormalOrSaf(path);
+        }
+        return ret;
+    }
+
+
     static final boolean isWritableNormalOrSaf(final String path) {
+
+        Log.i("kr2activaty","check path " + path + "permision");
+
     	Context c = sInstance;
     	File folder = new File(path);
+    	folder.mkdir();
+    	// Log.d("ke2activate", String.format("%b  and  %b", folder.exists(), folder.isDirectory()));
         if (!folder.exists() || !folder.isDirectory()) {
-            return false;
+           return false;
         }
 
         // Find a non-existing file in this directory.
@@ -829,6 +907,7 @@ public class KR2Activity extends Cocos2dxActivity {
         while (file.exists());
 
         // First check regular writability
+        Log.d("ke2activate", String.format("%b  ", isWritable(file)));
         if (isWritable(file)) {
             return true;
         }
@@ -845,6 +924,7 @@ public class KR2Activity extends Cocos2dxActivity {
 
         // Ensure that the dummy file is not remaining.
         document.delete();
+        DocumentFile.fromFile(folder).delete();
 
         return result;
     }
@@ -1093,9 +1173,9 @@ public class KR2Activity extends Cocos2dxActivity {
                 try {
                 	Uri docUri = document.getUri();
                     out = sInstance.getContentResolver().openOutputStream(docUri);
-                } catch (FileNotFoundException e) {
-                    // e.printStackTrace();
-                } catch (IOException e) {
+                } //catch (FileNotFoundException e) {
+                    // e.printStackTrace();}
+                catch (IOException e) {
                     // e.printStackTrace();
                 }
             } else if (Build.VERSION.SDK_INT==Build.VERSION_CODES.KITKAT) {
@@ -1208,6 +1288,7 @@ public class KR2Activity extends Cocos2dxActivity {
         sInstance.startActivityForResult(intent, 3);
     }
 
+    @SuppressLint("WrongConstant")
     @TargetApi(Build.VERSION_CODES.KITKAT)
     protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
         if (requestCode == 3) {

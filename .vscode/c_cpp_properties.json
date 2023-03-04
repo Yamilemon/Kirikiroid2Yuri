@@ -8,9 +8,10 @@
             "name": "Android (win)",
             "includePath": [
                 "${workspaceFolder}/src/core/**",
-                "${workspaceFolder}/thirdparty/build/arch_androida64/include",
-                "${workspaceFolder}/thirdparty/port/oniguruma/src/**",
-                "${workspaceFolder}/thirdparty/port/ffmpeg/**"
+                "${workspaceFolder}/src/cocos/**",
+                "${workspaceFolder}/thirdparty/build/arch_androida64/include/**",
+                "${workspaceFolder}/thirdparty/build/arch_androida64/sdk/native/jni/include/**",
+                "${workspaceFolder}/thirdparty/port/cocos2d-x/cocos/**"
             ],
             "defines": [
                 "__linux__"

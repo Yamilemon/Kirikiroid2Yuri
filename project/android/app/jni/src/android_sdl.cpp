@@ -57,7 +57,7 @@ namespace kr2android {
 void Android_PushEvents(const std::function<void()> &func);
 using namespace kr2android;
 extern "C" {
-	void Java_org_tvp_kirikiri2_KR2Activity_initDump(JNIEnv* env, jclass cls, jstring path) {
+	JNIEXPORT void JNICALL Java_org_tvp_kirikiri2_KR2Activity_initDump(JNIEnv* env, jclass cls, jstring path) {
 		const char* pszPath = env->GetStringUTFChars(path, NULL);
 		if (pszPath && *pszPath) {
 			static google_breakpad::MinidumpDescriptor descriptor(pszPath);
@@ -67,12 +67,12 @@ extern "C" {
 		env->ReleaseStringUTFChars(path, pszPath);
 	}
 	
-	void Java_org_tvp_kirikiri2_KR2Activity_onMessageBoxOK(JNIEnv* env, jclass cls, jint nButton) {
+	JNIEXPORT void JNICALL Java_org_tvp_kirikiri2_KR2Activity_onMessageBoxOK(JNIEnv* env, jclass cls, jint nButton) {
 		MsgBoxRet = nButton;
 		MessageBoxCond.notify_one();
 	}
     
-	void Java_org_tvp_kirikiri2_KR2Activity_onMessageBoxText(JNIEnv* env, jclass cls, jstring text) {
+	JNIEXPORT void JNICALL Java_org_tvp_kirikiri2_KR2Activity_onMessageBoxText(JNIEnv* env, jclass cls, jstring text) {
 		const char* pszText = env->GetStringUTFChars(text, NULL);
 		if (pszText && *pszText) {
             MessageBoxRetText = pszText;
