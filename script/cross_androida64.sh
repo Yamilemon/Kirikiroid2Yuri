@@ -15,13 +15,13 @@ function fetch_ports()
     fetch_opusfile
     fetch_unrar
     fetch_sdl2
-
+    fetch_lz4
     fetch_archive
+    fetch_p7z
     fetch_breakpad
     fetch_ffmpeg
     fetch_jpeg
     fetch_syscall
-    fetch_lz4
     fetch_oniguruma
     fetch_openal
     fetch_opencv
@@ -33,20 +33,21 @@ function fetch_ports()
 
 function build_ports()
 {
-    # build_opus
-    # build_libogg
-    # build_libvorbis
-    # build_opusfile
-    # build_unrar
-    # build_breakpad
-    # build_jpegturbo
-    # build_ffmpeg
-    # build_lz4
-    # build_archive
-    # build_opencv
-    # build_openal
-    # build_oniguruma
-    # build_sdl2
+    build_opus
+    build_libogg
+    build_libvorbis
+    build_opusfile
+    build_unrar
+    build_breakpad
+    build_jpegturbo
+    build_ffmpeg
+    build_lz4
+    build_archive
+    build_p7z
+    build_opencv
+    build_openal
+    build_oniguruma
+    build_sdl2
     build_cocos2dx
 }
 
@@ -55,18 +56,20 @@ if [ -n $ANDROID_HOME ]; then ANDROID_HOME=/d/Software/env/sdk/androidsdk; fi
 NDK_HOME=$ANDROID_HOME/ndk/$(ls -A $ANDROID_HOME/ndk | tail -n 1)
 PREBUILT_DIR=$NDK_HOME/toolchains/llvm/prebuilt
 PREBUILT_DIR=$PREBUILT_DIR/$(ls -A $PREBUILT_DIR | tail -n 1)
-PATH=$PREBUILT_DIR/bin:$PATH
+PATH=$NDK_HOME/build:$PREBUILT_DIR/bin:$PATH
 CC=$(which aarch64-linux-android21-clang)
 CXX=$(which aarch64-linux-android21-clang++)
 AR=$(which llvm-ar)
 RANLIB=$(which llvm-ranlib)
 NM=$(which llvm-nm)
 STRIP=$(which llvm-strip)
+NDKBUILD=$(which ndk-build)
 SYSROOT=$PREBUILT_DIR/sysroot
-
-# SKIP_PORTS="yes"
 echo "## ANDROID_HOME=$ANDROID_HOME"
+echo "## NDK-BUILD=$NDKBUILD"
 echo "## CC=$CC, AR=$AR"
+
+SKIP_PORTS="yes"
 if [ -z "$SKIP_PORTS" ]; then
     source ./_fetch.sh
     source ./_$PLATFORM.sh
@@ -74,12 +77,19 @@ if [ -z "$SKIP_PORTS" ]; then
     build_ports
 fi
 
-exit
-
 # config and build project
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
-if [ -z "$TARGETS" ]; then TARGETS=assembleRelease; fi
+if [ -z "$TARGETS" ]; then TARGETS=all; fi
 
+cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
+    -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
+    -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
+    -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
+    -DCMAKE_SYSROOT=$PORTBUILD_PATH
+make -C $BUILD_PATH $TARGETS -j$CORE_NUM
+exit
+
+if [ -z "$TARGETS" ]; then TARGETS=assembleRelease; fi
 pushd ${CMAKELISTS_PATH}/src/onsyuri_android
 echo "ANDROID_HOME=$ANDROID_HOME" 
 chmod +x ./gradlew && ./gradlew $TARGETS --no-daemon

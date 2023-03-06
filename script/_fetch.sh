@@ -69,11 +69,29 @@ function fetch_sdl2()
 }
 
 # git ports
+function fetch_lz4()
+{
+    LZ4_NAME=lz4
+    LZ4_SRC=$CMAKELISTS_PATH/thirdparty/port/$LZ4_NAME
+    fetch_port2 https://github.com/lz4 $LZ4_NAME
+}
+
 function fetch_archive()
 {
     ARCHIVE_NAME=libarchive
     ARCHIVE_SRC=$CMAKELISTS_PATH/thirdparty/port/$ARCHIVE_NAME
     fetch_port2 https://github.com/libarchive $ARCHIVE_NAME
+}
+
+function fetch_p7z()
+{
+    P7Z_NAME=p7zip_16.02
+    P7Z_SRC=$CMAKELISTS_PATH/thirdparty/port/$P7Z_NAME
+    if ! [ -d "$CMAKELISTS_PATH/thirdparty/port/$P7Z_NAME" ]; then
+        echo "## fetch_port $P7Z_NAME"
+        wget https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_src_all.tar.bz2 -O $CMAKELISTS_PATH/thirdparty/port/$P7Z_NAME.tar.bz2
+        tar zxf $CMAKELISTS_PATH/thirdparty/port//$P7Z_NAME.tar.bz2 -C $CMAKELISTS_PATH/thirdparty/port
+    fi 
 }
 
 function fetch_breakpad()
@@ -105,13 +123,6 @@ function fetch_syscall()
     SYSCALL_NAME=linux-syscall-support
     SYSCALL_SRC=$CMAKELISTS_PATH/thirdparty/port/$SYSCALL_NAME
     fetch_port2 https://github.com/adelshokhy112 $SYSCALL_NAME
-}
-
-function fetch_lz4()
-{
-    LZ4_NAME=lz4
-    LZ4_SRC=$CMAKELISTS_PATH/thirdparty/port/$LZ4_NAME
-    fetch_port2 https://github.com/lz4 $LZ4_NAME
 }
 
 function fetch_oniguruma()
@@ -160,5 +171,15 @@ function fetch_cocos2dx()
 {
     COCOS2DX_NAME=cocos2d-x
     COCOS2DX_SRC=$CMAKELISTS_PATH/thirdparty/port/$COCOS2DX_NAME
-    fetch_port2 https://github.com/cocos2d $COCOS2DX_NAME
+    
+    if ! [ -d "$CMAKELISTS_PATH/thirdparty/port/$COCOS2DX_NAME" ]; then
+        echo "## fetch_port $COCOS2DX_NAME"
+        git clone https://github.com/cocos2d/cocos2d-x.git $COCOS2DX_SRC
+        pushd $COCOS2DX_SRC
+            python download-deps.py
+             # submodule might cuse some problem, as it use git@
+            git config --global url.https://github.com/.insteadOf git://github.com/
+            git submodule update --init
+        popd
+    fi
 }

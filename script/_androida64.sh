@@ -54,7 +54,7 @@ build_opusfile() # after ogg, opus, vorbits
 
 build_unrar() 
 {   
-    cp $CMAKELISTS_PATH/thirdparty/patch/android_ulinks.cpp $UNRAR_SRC/ulinks.cpp
+    cp -rf $CMAKELISTS_PATH/thirdparty/patch/android_ulinks.cpp $UNRAR_SRC/ulinks.cpp
     pushd $UNRAR_SRC
     make clean
     make lib -j$CORE_NUM \
@@ -68,7 +68,7 @@ build_unrar()
 build_breakpad() 
 {
     if ! [ -d $BREAKPAD_SRC/build_$PLATFORM ]; then mkdir -p $BREAKPAD_SRC/build_$PLATFORM ;fi
-    cp -r $SYSCALL_SRC/lss $BREAKPAD_SRC/src/third_party/
+    cp -rf $SYSCALL_SRC/lss $BREAKPAD_SRC/src/third_party/
     pushd $BREAKPAD_SRC/build_$PLATFORM
     ../configure --host=aarch64-linux-android \
         CC=aarch64-linux-android21-clang  AR=llvm-ar \
@@ -135,7 +135,7 @@ build_lz4()
 build_archive()
 {
     if ! [ -d $ARCHIVE_SRC/build_$PLATFORM ]; then mkdir -p $ARCHIVE_SRC/build_$PLATFORM ;fi
-    cp $CMAKELISTS_PATH/thirdparty/patch/android_android_lf.h  $ARCHIVE_SRC/libarchive/android_lf.h
+    cp -rf $CMAKELISTS_PATH/thirdparty/patch/android_android_lf.h  $ARCHIVE_SRC/libarchive/android_lf.h
     pushd $ARCHIVE_SRC/build_$PLATFORM
     cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
         -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
@@ -143,6 +143,23 @@ build_archive()
         -DENABLE_OPENSSL=OFF -DENABLE_TEST=OFF \
         -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH
     make -j$CORE_NUM &&  make install
+    popd
+}
+
+build_p7z()
+{
+    echo ndk_build=$(which ndk-build)
+    if ! [ -d $P7Z_SRC/build_$PLATFORM ]; then mkdir -p $P7Z_SRC/build_$PLATFORM ;fi
+
+    cp -rf $CMAKELISTS_PATH/thirdparty/patch/7z* $P7Z_SRC/C
+    cp -rf $CMAKELISTS_PATH/thirdparty/patch/android_7z.cmake $P7Z_SRC/CPP/ANDROID/7za/jni/CMakeLists.txt
+
+    pushd $P7Z_SRC/build_$PLATFORM
+    cmake ../CPP/ANDROID/7za/jni -G "Unix Makefiles" \
+        -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake
+    make -j$CORE_NUM
+    cp -rf lib7za.a $PORTBUILD_PATH/lib
     popd
 }
 
@@ -162,7 +179,8 @@ build_opencv()
         -DBUILD_opencv_photo=OFF -DBUILD_opencv_python=OFF -DBUILD_opencv_shape=OFF \
         -DBUILD_opencv_stitching=OFF -DBUILD_opencv_superres=OFF \
         -DBUILD_opencv_ts=OFF -DBUILD_opencv_videostab=OFF -DBUILD_ANDROID_PROJECTS=OFF
-    make -j$CORE_NUM &&  make install # sdk/staticlibs/arm64-v8a
+    make -j$CORE_NUM &&  make install
+    cp -rf  $PORTBUILD_PATH/sdk/native/staticlibs/arm64-v8a/*.a $PORTBUILD_PATH/lib
     popd
 }
 
@@ -173,7 +191,8 @@ build_openal()
     cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
         -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
         -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
-        -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH 
+        -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH \
+        -DLIBTYPE=STATIC
     make -j$CORE_NUM &&  make install 
     popd
 }
@@ -181,6 +200,7 @@ build_openal()
 build_oniguruma()
 {
     if ! [ -d $ONIGURUMA_SRC/build_$PLATFORM ]; then mkdir -p $ONIGURUMA_SRC/build_$PLATFORM ;fi
+    cp -rf $CMAKELISTS_PATH/thirdparty/patch/oniguruma.cmake $ONIGURUMA_SRC/CMakeLists.txt
     pushd $ONIGURUMA_SRC/build_$PLATFORM
     cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
         -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
@@ -193,7 +213,7 @@ build_oniguruma()
 build_sdl2()
 {
     if ! [ -d $SDL2_SRC/build_$PLATFORM ]; then mkdir -p $SDL2_SRC/build_$PLATFORM ;fi
-    cp $CMAKELISTS_PATH/thirdparty/patch/android_SDL_android.c  $SDL2_SRC/src/core/android/SDL_android.c
+    cp -rf $CMAKELISTS_PATH/thirdparty/patch/android_SDL_android.c  $SDL2_SRC/src/core/android/SDL_android.c
     pushd $SDL2_SRC/build_$PLATFORM
     cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
         -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
@@ -209,11 +229,16 @@ build_cocos2dx()
 {
     if ! [ -d $COCOS2DX_SRC/platform/build_$PLATFORM ]; then mkdir -p $COCOS2DX_SRC/build_$PLATFORM ;fi
     git apply  $CMAKELISTS_PATH/thirdparty/patch/android_cocos2dx.diff
+    cp -rf $CMAKELISTS_PATH/thirdparty/patch/android_cocos2dx.cmake $COCOS2DX_SRC/CMakeLists.txt
     pushd $COCOS2DX_SRC/build_$PLATFORM
-    cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
+    cmake ../android_cocos2dx.cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
         -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
         -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
-        -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH
-    # make -j$CORE_NUM &&  make install 
+        -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH \
+        -DBUILD_LUA_LIBS=OFF
+    make -j$CORE_NUM
+    cp -rf lib/libcocos2d.a $PORTBUILD_PATH/lib/
+    cp -rf engine/cocos/android/libcpp_android_spec.a $PORTBUILD_PATH/lib/
+    cp -rf ../external/freetype2/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
     popd
 }
