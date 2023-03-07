@@ -4,6 +4,36 @@ project(krkr2core)
 set(KRKR2CORE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 set(COCOS2DX_PATH ${KRKR2CORE_PATH}/../../thirdparty/port/cocos2d-x)
 
+# prepare static lib
+function(add_static_library TARGET LIBNAME)
+    if ("${LIBNAME}" STREQUAL "")
+        set(LIBNAME "lib${TARGET}.a")
+    endif()
+    add_library("${TARGET}_static" STATIC IMPORTED GLOBAL)
+    set_target_properties("${TARGET}_static"
+        PROPERTIES IMPORTED_LOCATION
+        ${PORTBUILD_PATH}/lib/${LIBNAME}
+    )
+endfunction()
+
+add_static_library(jpeg libturbojpeg.a)
+add_static_library(ogg "")
+add_static_library(opus "")
+add_static_library(opusfile "")
+add_static_library(vorbis "")
+add_static_library(vorbisfile "")
+add_static_library(vorbisenc "")
+add_static_library(openal "")
+add_static_library(archive "")
+add_static_library(avutil "")
+add_static_library(avfilter "")
+add_static_library(avformat "")
+add_static_library(avcodec "")
+add_static_library(swscale "")
+add_static_library(swresample "")
+add_static_library(onig "")
+add_static_library(sdl2 libSDL2.a)
+
 # search kr2core src
 file(GLOB KRKR2CORE_CODE
     ${KRKR2CORE_PATH}/visual/*.cpp
@@ -86,7 +116,6 @@ if(CMAKE_SYSTEM_NAME MATCHES "Android")
         EGL
         GLESv2
         GLESv1_CM
-        GLESv3
         OpenSLES
     )
 endif()
@@ -140,43 +169,42 @@ target_link_directories(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME} PUBLIC
     -Wl,-Bstatic
     # audio
-    ogg
-    opus
-    vorbis 
-    vorbisfile 
-    vorbisenc 
-    opusfile
+    ogg_static
+    opus_static
+    vorbis_static 
+    vorbisfile_static
+    vorbisenc_static
+    opusfile_static
     oboe
-    openal
+    openal_static
 
     # image
-    jpeg
-    turbojpeg
+    jpeg_static
     opencv_imgproc
     opencv_core
     tegra_hal
     
     # video
-    avutil
-    avfilter
-    avformat
-    avcodec
-    swscale
-    swresample
+    avutil_static
+    avfilter_static
+    avformat_static
+    avcodec_static
+    swscale_static
+    swresample_static
 
     # archive
     unrar
     lz4
-    archive #  libbpg_static jxrlib_static
+    archive_static #  libbpg_static jxrlib_static
     7za
 
     # others
-    onig
+    onig_static
     breakpad
     breakpad_client
     
     # framework
-    SDL2
+    sdl2_static
     cocos2d
     ext_unzip
     ext_tinyxml2
@@ -198,8 +226,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     z
     png
     webp
-    libtiff
+    tiff
     freetype
-    
-    -Wl,-Bdynamic
 )

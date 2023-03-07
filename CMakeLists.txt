@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(krkr2yuri)
+
+option(PORTBUILD_PATH "use this value for thirdparty sysroot")
 set(CMAKE_CXX_STANDARD 11)
 set(KRKR2CORE_PATH ${CMAKE_SOURCE_DIR}/src/core)
 set(KRKR2PLUGIN_PATH ${CMAKE_SOURCE_DIR}/src/plugins)
@@ -24,7 +26,7 @@ else()
     message("${CMAKE_SYSTEM_NAME} not support yet")
 endif()
 target_compile_options(${PROJECT_NAME} PUBLIC
-    -fPIC
+    -fPIE
 )
 target_include_directories(${PROJECT_NAME} PUBLIC
     src/cocos

@@ -105,7 +105,7 @@ cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
     -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
     -DPORTBUILD_PATH=$PORTBUILD_PATH
 make -C $BUILD_PATH $TARGETS -j$CORE_NUM
-
+$STRIP $BUILD_PATH/libkrkr2yuri.so
 exit
 
 if [ -z "$TARGETS" ]; then TARGETS=assembleRelease; fi

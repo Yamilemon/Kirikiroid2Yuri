@@ -134,7 +134,7 @@ build_opencv()
     make -j$CORE_NUM &&  make install
     
     cp -rf  $PORTBUILD_PATH/sdk/native/3rdparty/libs/arm64-v8a/*.a $PORTBUILD_PATH/lib
-    cp -rf  $PORTBUILD_PATH/sdk/native/staticlibs/arm64-v8a/*.a $PORTBUILD_PATH/lib
+    cp -rf  $PORTBUILD_PATH/sdk/native/staticlibs/arm64-v8a/libtegra_hal.a $PORTBUILD_PATH/lib
     
     popd
 }
@@ -309,6 +309,7 @@ build_cocos2dx()
     cp -rf engine/cocos/android/libcpp_android_spec.a $PORTBUILD_PATH/lib/
     cp -rf ../external/zlib/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
     cp -rf ../external/png/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
+    cp -rf ../external/tiff/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
     cp -rf ../external/webp/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
     cp -rf ../external/freetype2/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
     cp -rf ../external/chipmunk/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
