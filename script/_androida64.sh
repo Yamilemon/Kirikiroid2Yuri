@@ -9,7 +9,7 @@ build_opus()
     ../configure --host=aarch64-linux-android \
         CC=aarch64-linux-android21-clang  AR=llvm-ar \
         CXX=aarch64-linux-android21-clang++ \
-        --prefix=$PORTBUILD_PATH
+        --prefix=$PORTBUILD_PATH --with-pic
     make -j$CORE_NUM &&  make install
     popd
 }
@@ -22,7 +22,7 @@ build_ogg()
     ../configure --host=aarch64-linux-android \
         CC=aarch64-linux-android21-clang  AR=llvm-ar \
         CXX=aarch64-linux-android21-clang++ \
-        --prefix=$PORTBUILD_PATH
+        --prefix=$PORTBUILD_PATH --with-pic
     make -j$CORE_NUM &&  make install
     popd
 }
@@ -35,7 +35,7 @@ build_vorbis()
     ../configure --host=aarch64-linux-android \
         CC=aarch64-linux-android21-clang  AR=llvm-ar \
         CXX=aarch64-linux-android21-clang++ \
-        --prefix=$PORTBUILD_PATH \
+        --prefix=$PORTBUILD_PATH --with-pic \
         --with-ogg=$PORTBUILD_PATH
     make -j$CORE_NUM &&  make install
     popd
@@ -49,13 +49,13 @@ build_opusfile() # after ogg, opus, vorbits
     ../configure --host=aarch64-linux-android \
         CC=aarch64-linux-android21-clang  AR=llvm-ar \
         CXX=aarch64-linux-android21-clang++ \
-        --prefix=$PORTBUILD_PATH \
+        --prefix=$PORTBUILD_PATH --with-pic \
         DEPS_CFLAGS="-I$PORTBUILD_PATH/include -I$PORTBUILD_PATH/include/opus" \
         DEPS_LIBS="-L$PORTBUILD_PATH/lib -logg -lopus" \
         --disable-http --disable-examples
     make -j$CORE_NUM &&  make install
     
-    cp -rf $CMAKELISTS_PATH/thirdparty/patch/opus/opusfile.h $PORTBUILD_PATH/include/opus/opusfile
+    cp -rf $CMAKELISTS_PATH/thirdparty/patch/opus/opusfile.h $PORTBUILD_PATH/include/opus/opusfile.h
     
     popd
 }
@@ -68,9 +68,13 @@ build_oboe()
     cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
         -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
         -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
+        -DCMAKE_C_FLAGS="-fPIC" -DCMAKE_CXX_FLAGS="-fPIC" \
         -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH \
         -DLIBTYPE=STATIC
     make -j$CORE_NUM &&  make install 
+
+    mv -f $PORTBUILD_PATH/lib/arm64-v8a/liboboe.a $PORTBUILD_PATH/lib/liboboe.a
+
     popd
 }
 
@@ -82,6 +86,7 @@ build_openal()
     cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \
         -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
         -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
+        -DCMAKE_C_FLAGS="-fPIC" -DCMAKE_CXX_FLAGS="-fPIC" \
         -DCMAKE_INSTALL_PREFIX=$PORTBUILD_PATH \
         -DLIBTYPE=STATIC
     make -j$CORE_NUM &&  make install 
@@ -124,10 +129,11 @@ build_opencv()
         -DBUILD_opencv_flann=OFF -DBUILD_opencv_highgui=OFF -DBUILD_opencv_ml=OFF \
         -DBUILD_opencv_dnn=OFF -DBUILD_opencv_gapi=OFF -DBUILD_opencv_hal=ON \
         -DBUILD_opencv_photo=OFF -DBUILD_opencv_python=OFF -DBUILD_opencv_shape=OFF \
-        -DBUILD_opencv_stitching=OFF -DBUILD_opencv_superres=OFF \
+        -DBUILD_opencv_stitching=OFF -DBUILD_opencv_superres=OFF -DWITH_ITT=OFF \
         -DBUILD_opencv_ts=OFF -DBUILD_opencv_videostab=OFF -DBUILD_ANDROID_PROJECTS=OFF
     make -j$CORE_NUM &&  make install
     
+    cp -rf  $PORTBUILD_PATH/sdk/native/3rdparty/libs/arm64-v8a/*.a $PORTBUILD_PATH/lib
     cp -rf  $PORTBUILD_PATH/sdk/native/staticlibs/arm64-v8a/*.a $PORTBUILD_PATH/lib
     
     popd
@@ -144,8 +150,8 @@ build_ffmpeg()
         --cc=aarch64-linux-android21-clang  --ar=llvm-ar \
         --cxx=aarch64-linux-android21-clang++ --ranlib=llvm-ranlib \
         --strip=llvm-strip --prefix=$PORTBUILD_PATH \
-        --arch=aarch64 --target-os=android --enable-pic \
-        --enable-static --enable-shared --enable-small \
+        --arch=aarch64 --target-os=android --enable-pic --disable-asm \
+        --enable-static --enable-shared --enable-small --enable-swscale \
         --disable-ffmpeg --disable-ffplay --disable-ffprobe \
         --disable-avdevice --disable-programs --disable-doc
 
@@ -219,6 +225,7 @@ build_p7zip()
     pushd $P7ZIP_SRC/build_$PLATFORM
     cmake ../CPP/ANDROID/7za/jni -G "Unix Makefiles" \
         -DCMAKE_BUILD_TYPE=MinSizeRel \
+        -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
         -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake
     make -j$CORE_NUM
     
@@ -251,7 +258,7 @@ build_oniguruma()
     popd
 }
 
-build_breakpad() 
+build_breakpad() # after linux-syscall
 {
     if ! [ -d $BREAKPAD_SRC/build_$PLATFORM ]; then mkdir -p $BREAKPAD_SRC/build_$PLATFORM ;fi
     cp -rf $SYSCALL_SRC/lss $BREAKPAD_SRC/src/third_party/
@@ -298,8 +305,14 @@ build_cocos2dx()
     make -j$CORE_NUM
     
     cp -rf lib/libcocos2d.a $PORTBUILD_PATH/lib/
+    cp -rf lib/libext_*.a $PORTBUILD_PATH/lib/
     cp -rf engine/cocos/android/libcpp_android_spec.a $PORTBUILD_PATH/lib/
+    cp -rf ../external/zlib/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
+    cp -rf ../external/png/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
+    cp -rf ../external/webp/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
     cp -rf ../external/freetype2/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
+    cp -rf ../external/chipmunk/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
+    cp -rf ../external/bullet/prebuilt/android/arm64-v8a/*.a $PORTBUILD_PATH/lib/
     
     popd
 }

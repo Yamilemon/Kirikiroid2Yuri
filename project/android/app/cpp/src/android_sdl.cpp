@@ -13,8 +13,8 @@
 #include <string>
 #include <condition_variable>
 #include <mutex>
-#include "client/linux/handler/exception_handler.h"
-#include "client/linux/handler/minidump_descriptor.h"
+#include "breakpad/client/linux/handler/exception_handler.h"
+#include "breakpad/client/linux/handler/minidump_descriptor.h"
 
 //std::string Android_GetDumpStoragePath();
 

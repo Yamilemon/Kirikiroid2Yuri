@@ -55,7 +55,7 @@ android {
     }
 
     sourceSets.main {
-        java.srcDir "src"
+        java.srcDir "java"
         res.srcDir "res"
         manifest.srcFile "AndroidManifest.xml"
         assets.srcDir "../../../asset"
@@ -64,7 +64,7 @@ android {
     externalNativeBuild {
         if (PROP_BUILD_TYPE == 'ndk-build') {
             ndkBuild {
-                path "jni/Android.mk"
+                path "cpp/Android.mk"
             }
         }
         else if (PROP_BUILD_TYPE == 'cmake') {

@@ -1,9 +1,9 @@
 #include "XP3ArchiveRepack.h"
 #include <functional>
-#include "7zip/CPP/7zip/Archive/7z/7zOut.h"
-#include "7zip/CPP/7zip/Common/StreamObjects.h"
+#include "p7zip/CPP/7zip/Archive/7z/7zOut.h"
+#include "p7zip/CPP/7zip/Common/StreamObjects.h"
 extern "C" {
-#include "7zip/C/7zCrc.h"
+#include "p7zip/C/7zCrc.h"
 }
 #include "TextStream.h"
 #include "StorageImpl.h"

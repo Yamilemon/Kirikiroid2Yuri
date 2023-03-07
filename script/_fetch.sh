@@ -72,10 +72,12 @@ function fetch_p7zip()
 {
     P7ZIP_NAME=p7zip_16.02
     P7ZIP_SRC=$CMAKELISTS_PATH/thirdparty/port/$P7ZIP_NAME
-    if ! [ -d "$CMAKELISTS_PATH/thirdparty/port/$P7ZIP_NAME" ]; then
+    if ! [ -d "$P7ZIP_SRC" ]; then
         echo "## fetch_port $P7ZIP_NAME"
-        wget https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_src_all.tar.bz2 -O $CMAKELISTS_PATH/thirdparty/port/$P7ZIP_NAME.tar.bz2
-        tar zxf $CMAKELISTS_PATH/thirdparty/port//$P7ZIP_NAME.tar.bz2 -C $CMAKELISTS_PATH/thirdparty/port
+        wget https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_src_all.tar.bz2 \
+            -O $CMAKELISTS_PATH/thirdparty/port/$P7ZIP_NAME.tar.bz2
+        tar zxf $CMAKELISTS_PATH/thirdparty/port//$P7ZIP_NAME.tar.bz2 \
+            -C $CMAKELISTS_PATH/thirdparty/port
     fi 
 }
 
@@ -149,6 +151,13 @@ function fetch_oniguruma()
     fetch_port2 https://github.com/krkrz $ONIGURUMA_NAME
 }
 
+function fetch_syscall()
+{
+    SYSCALL_NAME=linux-syscall-support
+    SYSCALL_SRC=$CMAKELISTS_PATH/thirdparty/port/$SYSCALL_NAME
+    fetch_port2 https://github.com/adelshokhy112 $SYSCALL_NAME
+}
+
 function fetch_breakpad()
 {
     BREAKPAD_NAME=breakpad
@@ -172,14 +181,7 @@ function fetch_cocos2dx()
     fi
 }
 
-# unuse ports
-function fetch_syscall()
-{
-    SYSCALL_NAME=linux-syscall-support
-    SYSCALL_SRC=$CMAKELISTS_PATH/thirdparty/port/$SYSCALL_NAME
-    fetch_port2 https://github.com/adelshokhy112 $SYSCALL_NAME
-}
-
+# notused  ports
 function fetch_bpg()
 {
     BPG_NAME=android-bpg

@@ -407,10 +407,11 @@ void TVPMainFileSelectorForm::showMenu(Ref*) {
 				_AskExit();
 			});
 		}
-		reader.findWidget("btnRepack")->addClickEventListener([this](Ref*) {
-			TVPProcessXP3Repack(CurrentPath);
-			hideMenu(nullptr);
-		});
+		// ## fix repack can not compile
+		// reader.findWidget("btnRepack")->addClickEventListener([this](Ref*) {
+		// 	TVPProcessXP3Repack(CurrentPath);
+		// 	hideMenu(nullptr);
+		// });
 		reader.findWidget("btnNewFolder")->addClickEventListener([this](Ref*) {
 			ttstr name = TJS_W("New Folder");
 			std::vector<ttstr> btns;

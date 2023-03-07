@@ -33,8 +33,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${PORTBUILD_PATH}/include
 )
 target_compile_options(${PROJECT_NAME} PUBLIC 
-    -fexceptions -std=c++14 -fvisibility=hidden
+    -fPIC -fexceptions -std=c++14 -fvisibility=hidden
 )
+
 target_compile_definitions(${PROJECT_NAME} PUBLIC
     -D__STDC_CONSTANT_MACROS -DTJS_TEXT_OUT_CRLF 
     -DTJS_TEXT_OUT_CRLF

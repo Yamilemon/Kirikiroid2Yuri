@@ -21,7 +21,7 @@
 #include <stdint.h>
 #include "win32io.h"
 
-//namespace cocos2d {
+namespace cocos2d {
 
 voidpf call_zopen64 (const zlib_filefunc64_32_def* pfilefunc,const void*filename,int mode)
 {
@@ -184,7 +184,7 @@ static int ZCALLBACK ferror_file_func (voidpf opaque, voidpf stream)
     return 0;
 }
 
-void fill_fopen_filefunc (zlib_filefunc_def* pzlib_filefunc_def)
+void fill_fopen_filefunc (zlib_filefunc_def* pzlib_filefunc_def) 
 {
     pzlib_filefunc_def->zopen_file = fopen_file_func;
     pzlib_filefunc_def->zread_file = fread_file_func;
@@ -196,8 +196,9 @@ void fill_fopen_filefunc (zlib_filefunc_def* pzlib_filefunc_def)
     pzlib_filefunc_def->opaque = NULL;
 }
 
+// ## fix error: call to 'fill_fopen64_filefunc' is ambiguous
 zlib_filefunc64_def TVPZlibFileFunc;
-void fill_fopen64_filefunc (zlib_filefunc64_def*  pzlib_filefunc_def)
+void fill_fopen64_filefunc2 (zlib_filefunc64_def*  pzlib_filefunc_def)
 {
     pzlib_filefunc_def->zopen64_file = fopen64_file_func;
     pzlib_filefunc_def->zread_file = fread_file_func;
@@ -212,8 +213,8 @@ void fill_fopen64_filefunc (zlib_filefunc64_def*  pzlib_filefunc_def)
 class _TVPInitZlibFileFunc {
 public:
 	_TVPInitZlibFileFunc() {
-		fill_fopen64_filefunc(&TVPZlibFileFunc);
+		fill_fopen64_filefunc2(&TVPZlibFileFunc);
 	}
 } __TVPInitZlibFileFunc;
 
-//} // end of namespace cocos2d
+} // end of namespace cocos2d

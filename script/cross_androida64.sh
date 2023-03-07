@@ -18,7 +18,7 @@ function fetch_ports()
     fetch_openal
     
     # video
-    fetch_jpeg    
+    fetch_jpeg
     fetch_opencv
     fetch_ffmpeg
 
@@ -30,6 +30,7 @@ function fetch_ports()
 
     # others
     fetch_oniguruma
+    fetch_syscall
     fetch_breakpad
 
     # framework
@@ -104,6 +105,7 @@ cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
     -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
     -DPORTBUILD_PATH=$PORTBUILD_PATH
 make -C $BUILD_PATH $TARGETS -j$CORE_NUM
+
 exit
 
 if [ -z "$TARGETS" ]; then TARGETS=assembleRelease; fi

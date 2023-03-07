@@ -258,5 +258,5 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 # Needed since ANDROID 5, these programs run on android-16 (Android 4.1+)
 target_compile_options(${PROJECT_NAME} PUBLIC
-    -fPIE  -fexceptions -Wno-c++11-narrowing
+    -fPIC -fexceptions -Wno-c++11-narrowing
 )
