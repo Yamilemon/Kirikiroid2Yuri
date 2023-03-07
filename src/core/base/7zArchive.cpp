@@ -3,9 +3,9 @@
 #include "UtilStreams.h"
 #include <algorithm>
 extern "C" {
-#include "7zip/C/7z.h"
-#include "7zip/C/7zFile.h"
-#include "7zip/C/7zCrc.h"
+#include "p7zip/C/7z.h"
+#include "p7zip/C/7zFile.h"
+#include "p7zip/C/7zCrc.h"
 }
 #include "StorageImpl.h"
 

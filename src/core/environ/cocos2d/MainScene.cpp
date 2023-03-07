@@ -22,6 +22,7 @@
 #include "ui/ConsoleWindow.h"
 #include "ui/FileSelectorForm.h"
 #include "ui/DebugViewLayerForm.h"
+#include "ui/UIButton.h"
 #include "Application.h"
 #include "ScriptMgnIntf.h"
 #include "win32/TVPWindow.h"
@@ -297,7 +298,7 @@ Sprite *TVPLoadCursorCUR(tTJSBinaryStream *pStream) {
 			}
 		}
 		cocos2d::Image *surface = new cocos2d::Image;
-		surface->initWithRawData(&pixbuf[0], pixbuf.size(), bmhdr.biWidth, bmhdr.biHeight, Texture2D::PixelFormat::RGBA8888, false);
+		surface->initWithRawData(&pixbuf[0], pixbuf.size(), bmhdr.biWidth, bmhdr.biHeight, 0, false) ; //Texture2D::PixelFormat::RGBA8888, false);
 		Texture2D *tex = new Texture2D();
 		tex->initWithImage(surface);
 		Sprite *sprite = Sprite::create();
@@ -432,7 +433,7 @@ public:
 		return PrimaryLayerArea;
 	}
 
-	virtual Vec2 minContainerOffset() override {
+	virtual Vec2 minContainerOffset() { // override {
 		const Size &size = getContentSize();
 		float scale = _container->getScale();
 		Vec2 ret(_viewSize.width - size.width * scale * _drawSpriteScaleX,
@@ -451,7 +452,7 @@ public:
 		return ret;
 	}
 
-	virtual Vec2 maxContainerOffset() override {
+	virtual Vec2 maxContainerOffset(){ // override {
 		// bottom-left
 		const Size &size = getContentSize();
 		float scale = _container->getScale();
@@ -2343,9 +2344,10 @@ void TVPConsoleLog(const ttstr &l, bool important) {
 	WideCharToMultiByte(CP_ACP, 0, l.c_str(), -1, buf, sizeof(buf), nullptr, FALSE);
 	puts(buf);
 #else
-	std::string utf8;
-	if (StringUtils::UTF16ToUTF8(l.c_str(), utf8))
-		cocos2d::log("%s", utf8.c_str());
+    cocos2d::log("%ls", l.c_str());
+// 	std::string utf8;
+// 	if (StringUtils::UTF16ToUTF8(l.c_str(), utf8))
+// 		cocos2d::log("%s", utf8.c_str());
 #endif
 }
 

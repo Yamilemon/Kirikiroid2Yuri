@@ -9,7 +9,7 @@
 #include "Platform.h"
 #include "cocos2d/MainScene.h"
 #include "ConfigManager/LocaleConfigManager.h"
-#include "CCFileUtils.h"
+#include "platform/CCFileUtils.h"
 #include "base/CCDirector.h"
 #include "MessageBox.h"
 #include "platform/CCDevice.h"

@@ -248,8 +248,8 @@ protected:
 	int lastIndex;
 	int firstIndex;
 
-	tVectorList(const tVectorList&);//²»¿É±»¸´ÖÆ
-	tVectorList& operator=(const tVectorList&);//²»¿É±»¸³Öµ
+	tVectorList(const tVectorList&);//ï¿½ï¿½ï¿½É±ï¿½ï¿½ï¿½ï¿½ï¿½
+	tVectorList& operator=(const tVectorList&);//ï¿½ï¿½ï¿½É±ï¿½ï¿½ï¿½Öµ
 
 	void _erase(unsigned int index) {
 		_tVectorList_Node &Node = PointerBuffPtr[index];
@@ -483,7 +483,7 @@ public:
 		*/
 
 		_ensureCapacity();
-		int currentIndex = UnusedIndexStack.pop_back();
+		int currentIndex = (int)UnusedIndexStack.pop_back(); // ## fix error: cannot initialize a variable of type 'int'
 		_tVectorList_Node &Node = PointerBuffPtr[currentIndex];
 		_tVectorList_Node &PrevNode = PointerBuffPtr[IteratorNode.prevIndex];
 		Node.Data = _Val;
@@ -513,7 +513,7 @@ public:
 		*/
 
 		_ensureCapacity();
-		int currentIndex = UnusedIndexStack.pop_back();
+		int currentIndex = (int)UnusedIndexStack.pop_back();
 		_tVectorList_Node &Node = PointerBuffPtr[currentIndex];
 		_tVectorList_Node &NextNode = PointerBuffPtr[IteratorNode.nextIndex];
 		Node.Data = _Val;

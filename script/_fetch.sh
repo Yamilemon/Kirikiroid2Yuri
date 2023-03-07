@@ -22,7 +22,6 @@ function fetch_port2()
     fi
 }
 
-# wget ports
 function fetch_vorbis()
 {
     VORBIS_NAME=libvorbis-1.3.7
@@ -30,18 +29,18 @@ function fetch_vorbis()
     fetch_port https://downloads.xiph.org/releases/vorbis $VORBIS_NAME
 }
 
-function fetch_ogg()
-{
-    OGG_NAME=libogg-1.3.5
-    OGG_SRC=$CMAKELISTS_PATH/thirdparty/port/$OGG_NAME
-    fetch_port https://downloads.xiph.org/releases/ogg $OGG_NAME
-}
-
 function fetch_opus()
 {
     OPUS_NAME=opus-1.3.1
     OPUS_SRC=$CMAKELISTS_PATH/thirdparty/port/$OPUS_NAME
     fetch_port https://archive.mozilla.org/pub/opus $OPUS_NAME
+}
+
+function fetch_ogg()
+{
+    OGG_NAME=libogg-1.3.5
+    OGG_SRC=$CMAKELISTS_PATH/thirdparty/port/$OGG_NAME
+    fetch_port https://downloads.xiph.org/releases/ogg $OGG_NAME
 }
 
 function fetch_opusfile()
@@ -83,14 +82,14 @@ function fetch_archive()
     fetch_port2 https://github.com/libarchive $ARCHIVE_NAME
 }
 
-function fetch_p7z()
+function fetch_p7zip()
 {
-    P7Z_NAME=p7zip_16.02
-    P7Z_SRC=$CMAKELISTS_PATH/thirdparty/port/$P7Z_NAME
-    if ! [ -d "$CMAKELISTS_PATH/thirdparty/port/$P7Z_NAME" ]; then
-        echo "## fetch_port $P7Z_NAME"
-        wget https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_src_all.tar.bz2 -O $CMAKELISTS_PATH/thirdparty/port/$P7Z_NAME.tar.bz2
-        tar zxf $CMAKELISTS_PATH/thirdparty/port//$P7Z_NAME.tar.bz2 -C $CMAKELISTS_PATH/thirdparty/port
+    P7ZIP_NAME=p7zip_16.02
+    P7ZIP_SRC=$CMAKELISTS_PATH/thirdparty/port/$P7ZIP_NAME
+    if ! [ -d "$CMAKELISTS_PATH/thirdparty/port/$P7ZIP_NAME" ]; then
+        echo "## fetch_port $P7ZIP_NAME"
+        wget https://sourceforge.net/projects/p7zip/files/p7zip/16.02/p7zip_16.02_src_all.tar.bz2 -O $CMAKELISTS_PATH/thirdparty/port/$P7ZIP_NAME.tar.bz2
+        tar zxf $CMAKELISTS_PATH/thirdparty/port//$P7ZIP_NAME.tar.bz2 -C $CMAKELISTS_PATH/thirdparty/port
     fi 
 }
 
@@ -174,12 +173,11 @@ function fetch_cocos2dx()
     
     if ! [ -d "$CMAKELISTS_PATH/thirdparty/port/$COCOS2DX_NAME" ]; then
         echo "## fetch_port $COCOS2DX_NAME"
-        git clone https://github.com/cocos2d/cocos2d-x.git $COCOS2DX_SRC
+        git clone -b v3 https://github.com/cocos2d/cocos2d-x.git $COCOS2DX_SRC
         pushd $COCOS2DX_SRC
-            python download-deps.py
-             # submodule might cuse some problem, as it use git@
+            python2 download-deps.py # must use cocos v3 and python2
             git config --global url.https://github.com/.insteadOf git://github.com/
-            git submodule update --init
+            git submodule update --init # submodule might cuse some problem, as it use git@
         popd
     fi
 }

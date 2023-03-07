@@ -33,9 +33,9 @@ public:
 
 	void addAutoSearchArchive(const std::string& path);
 	virtual std::string fullPathForFilename(const std::string &filename) const override;
-	virtual std::string getStringFromFile(const std::string& filename) override;
-	virtual Data getDataFromFile(const std::string& filename) override;
-	virtual unsigned char* getFileData(const std::string& filename, const char* mode, ssize_t *size) override;
+	virtual std::string getStringFromFile(const std::string& filename);
+	virtual Data getDataFromFile(const std::string& filename);
+	virtual unsigned char* getFileData(const std::string& filename, const char* mode, ssize_t *size);
 	virtual bool isFileExistInternal(const std::string& strFilePath) const override;
 	virtual bool isDirectoryExistInternal(const std::string& dirPath) const override;
 	virtual bool init() override {

@@ -2498,7 +2498,7 @@ static tjs_int TVPTLG5DecompressSlide_NEON(tjs_uint8 *out, const tjs_uint8 *in, 
 						vst1q_u8(&text[r], c);
 						mpos += 16; r += 16; out += 16;
 					}
-					mlen &= 0x0f;	// Óà¤ê
+					mlen &= 0x0f;	// ï¿½ï¿½ï¿½
 					while (mlen--) {
 						out[0] = text[r++] = text[mpos++]; out++;
 					}
@@ -3143,7 +3143,7 @@ static void logTLG6_chroma() {
 #endif
 #define REGISTER_TVPGL_ONLY(origf, f) origf = f;
 
-#include "Protect.h"
+// #include "Protect.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

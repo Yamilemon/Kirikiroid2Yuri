@@ -17,7 +17,7 @@ function fetch_ports()
     fetch_sdl2
     fetch_lz4
     fetch_archive
-    fetch_p7z
+    fetch_p7zip
     fetch_breakpad
     fetch_ffmpeg
     fetch_jpeg
@@ -33,20 +33,30 @@ function fetch_ports()
 
 function build_ports()
 {
+    # audio
     build_opus
-    build_libogg
-    build_libvorbis
+    build_ogg
+    build_vorbis
     build_opusfile
-    build_unrar
-    build_breakpad
+    build_oboe
+    build_openal
+
+    # video
     build_jpegturbo
+    build_opencv
     build_ffmpeg
+
+    # archive
+    build_unrar
     build_lz4
     build_archive
-    build_p7z
-    build_opencv
-    build_openal
+    build_p7zip
+
+    # others
     build_oniguruma
+    build_breakpad
+
+    # framework
     build_sdl2
     build_cocos2dx
 }
@@ -67,7 +77,8 @@ NDKBUILD=$(which ndk-build)
 SYSROOT=$PREBUILT_DIR/sysroot
 echo "## ANDROID_HOME=$ANDROID_HOME"
 echo "## NDK-BUILD=$NDKBUILD"
-echo "## CC=$CC, AR=$AR"
+echo "## CC=$CC"
+echo "## AR=$AR"
 
 SKIP_PORTS="yes"
 if [ -z "$SKIP_PORTS" ]; then
@@ -81,11 +92,17 @@ fi
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
 if [ -z "$TARGETS" ]; then TARGETS=all; fi
 
+# source ./_fetch.sh
+# source ./_$PLATFORM.sh
+# fetch_ports
+# build_lz4
+# exit
+
 cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
     -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
     -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
     -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
-    -DCMAKE_SYSROOT=$PORTBUILD_PATH
+    -DPORTBUILD_PATH=$PORTBUILD_PATH
 make -C $BUILD_PATH $TARGETS -j$CORE_NUM
 exit
 

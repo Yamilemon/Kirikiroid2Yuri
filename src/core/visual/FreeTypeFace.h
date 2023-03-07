@@ -18,8 +18,9 @@
 #pragma warning(push)
 #pragma warning(disable : 4819)
 #endif
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include "freetype2/ft2build.h"
+#include "freetype2/freetype.h"
+// #include FT_FREETYPE_H
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif

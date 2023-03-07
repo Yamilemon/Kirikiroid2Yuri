@@ -8,10 +8,14 @@
             "name": "Android (win)",
             "includePath": [
                 "${workspaceFolder}/src/core/**",
+                "${workspaceFolder}/src/core/sound/**",
                 "${workspaceFolder}/src/cocos/**",
                 "${workspaceFolder}/thirdparty/build/arch_androida64/include/**",
                 "${workspaceFolder}/thirdparty/build/arch_androida64/sdk/native/jni/include/**",
-                "${workspaceFolder}/thirdparty/port/cocos2d-x/cocos/**"
+                "${workspaceFolder}/thirdparty/port/cocos2d-x/**",
+                "${workspaceFolder}/thirdparty/port/cocos2d-x/external/**",
+                "${workspaceFolder}/thirdparty/port/cocos2d-x/cocos/**",
+                "${env:androidndk}/sources/android/cpufeatures"
             ],
             "defines": [
                 "__linux__"

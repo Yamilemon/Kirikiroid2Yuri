@@ -1,8 +1,14 @@
 #include "FontImpl.h"
-#include <ft2build.h>
-#include FT_TRUETYPE_IDS_H
-#include FT_SFNT_NAMES_H
-#include FT_FREETYPE_H
+
+// ## fix error: unknown type name 'FT_Library'
+#include "freetype2/ft2build.h"
+#include "freetype2/freetype.h"
+#include "freetype2/ftsnames.h"
+#include "freetype2/ttnameid.h"
+// #include FT_TRUETYPE_IDS_H
+// #include FT_SFNT_NAMES_H
+// #include FT_FREETYPE_H
+
 #include "StorageIntf.h"
 #include "DebugIntf.h"
 #include "MsgIntf.h"

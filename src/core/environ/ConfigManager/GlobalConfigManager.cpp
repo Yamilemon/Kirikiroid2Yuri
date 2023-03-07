@@ -10,7 +10,7 @@ class XMLMemPrinter : public tinyxml2::XMLPrinter {
 	tTVPMemoryStream _stream;
 	char _buffer[4096];
 public:
-	virtual void Print(const char* format, ...) override {
+	virtual void Print(const char* format, ...) {
 		va_list param;
 		va_start(param, format);
 		int n = vsnprintf(_buffer, 4096, format, param);

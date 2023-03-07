@@ -1,8 +1,19 @@
 cmake_minimum_required(VERSION 3.6)
 project(krkr2core)
 
-# search kr2core src
 set(KRKR2CORE_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+set(COCOS2DX_PATH ${KRKR2CORE_PATH}/../../thirdparty/port/cocos2d-x)
+if(CMAKE_SYSTEM_NAME MATCHES "Android")
+    set(PLATFORM android)
+elseif(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    set(PLATFORM linux)
+elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
+    set(PLATFORM win32)
+else()
+    set(PLATFORM android)
+endif()
+
+# search kr2core src
 file(GLOB KRKR2CORE_CODE 
     ${KRKR2CORE_PATH}/visual/*.cpp
     ${KRKR2CORE_PATH}/base/*.cpp
@@ -37,12 +48,13 @@ file(GLOB KRKR2CORE_CODE
     ${KRKR2CORE_PATH}/visual/ARM/*.c
 )
 list(REMOVE_ITEM KRKR2CORE_CODE
-    ${KRKR2CORE_PATH}/visual/Resampler.cpp
     ${KRKR2CORE_PATH}/base/win32/FuncStubs.cpp
     ${KRKR2CORE_PATH}/base/win32/SusieArchive.cpp
     ${KRKR2CORE_PATH}/environ/MainFormUnit.cpp
+    ${KRKR2CORE_PATH}/environ/XP3ArchiveRepack.cpp
     ${KRKR2CORE_PATH}/sound/xmmlib.cpp
     ${KRKR2CORE_PATH}/sound/WaveFormatConverter_SSE.cpp
+    ${KRKR2CORE_PATH}/visual/Resampler.cpp
     ${KRKR2CORE_PATH}/visual/win32/GDIFontRasterizer.cpp 
     ${KRKR2CORE_PATH}/visual/win32/NativeFreeTypeFace.cpp
     ${KRKR2CORE_PATH}/visual/win32/TVPSysFont.cpp 
@@ -74,32 +86,39 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     ${KRKR2CORE_PATH}/visual/win32
     ${KRKR2CORE_PATH}/visual/RenderScript/rs
     ${KRKR2CORE_PATH}/../plugins
-    ${KRKR2CORE_PATH}/../../thirdparty/port/cocos2d-x/cocos
-    ${CMAKE_SYSROOT}/include
-    ${CMAKE_SYSROOT}/sdk/native/jni
+
+    ${COCOS2DX_PATH}
+    ${COCOS2DX_PATH}/cocos
+    ${COCOS2DX_PATH}/cocos/scripting
+    ${COCOS2DX_PATH}/cocos/editor-support
+    ${COCOS2DX_PATH}/extensions
+    ${COCOS2DX_PATH}/external
+    ${COCOS2DX_PATH}/external/png/include/${PLATFORM}
+    ${COCOS2DX_PATH}/external/webp/include/${PLATFORM}
+    ${COCOS2DX_PATH}/external/freetype2/include/${PLATFORM}
+    ${COCOS2DX_PATH}/external/freetype2/include/${PLATFORM}/freetype2
+
+    ${PORTBUILD_PATH}/include
 )
+
+if(CMAKE_SYSTEM_NAME MATCHES "Android")
+    target_include_directories(${PROJECT_NAME} PUBLIC
+        ${PORTBUILD_PATH}/sdk/native/jni/include
+        ${CMAKE_ANDROID_NDK}/sources/android/cpufeatures
+    )
+endif()
+
 target_compile_definitions(${PROJECT_NAME} PUBLIC
     -DTJS_TEXT_OUT_CRLF -D__STDC_CONSTANT_MACROS -DUSE_UNICODE_FSTRING
     -DTJS_TEXT_OUT_CRLF -D_7ZIP_ST
 )
+
 target_link_directories(${PROJECT_NAME} PUBLIC
     ${CMAKE_SYSROOT}/lib
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC
     -Wl,-Bstatic
-    cocos2d
-    ext_freetype
-
-    unrar
-    lz4
-    7za
-    archive #  libbpg_static jxrlib_static
-    
-    SDL2
-    turbojpep
-    opencv_core
-    opencv_imgproc
-    ffmpeg
+    # audio
     openal
     onig
     ogg
@@ -108,7 +127,26 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     vorbisfile 
     vorbisenc 
     opusfile 
+
+    # video
+    turbojpep
+    opencv_core
+    opencv_imgproc
+    ffmpeg
+
+    # archive
+    unrar
+    lz4
+    archive #  libbpg_static jxrlib_static
+    7za
+
+    # others
     breakpad
     breakpad_client
+    
+    # framework
+    SDL2
+    cocos2d
+    ext_freetype
     -Wl,-Bdynamic
 )

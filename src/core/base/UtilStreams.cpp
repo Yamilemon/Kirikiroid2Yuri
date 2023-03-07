@@ -760,9 +760,9 @@ const char * tTVPUnpackArchiveImplLibArchive::_onPassphraseCallback(struct archi
 }
 
 extern "C" {
-#include "7zip/C/7z.h"
-#include "7zip/C/7zFile.h"
-#include "7zip/C/7zCrc.h"
+#include "p7zip/C/7z.h"
+#include "p7zip/C/7zFile.h"
+#include "p7zip/C/7zCrc.h"
 }
 #include <fcntl.h>
 #include <unistd.h>

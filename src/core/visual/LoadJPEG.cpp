@@ -42,7 +42,7 @@ extern "C"
 {
 #include <turbojpeg.h>
 #define XMD_H
-#include <jinclude.h>
+//#include <jinclude.h>
 #include <jpeglib.h>
 #include <jerror.h>
 }
@@ -410,7 +410,7 @@ METHODDEF(void) JPEG_write_init_destination( j_compress_ptr cinfo ) {
 METHODDEF(boolean) JPEG_write_empty_output_buffer( j_compress_ptr cinfo ) {
 	stream_dest_ptr dest = (stream_dest_ptr)cinfo->dest;
 	
-	// ‘«‚è‚È‚­‚È‚Á‚½‚ç“r’†‘‚«‚İ
+	// ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	size_t	wrotelen = dest->bufsizeinit - dest->pub.free_in_buffer;
 	dest->stream->WriteBuffer( dest->buffer, (tjs_uint)wrotelen );
 
@@ -452,11 +452,11 @@ struct tTVPJPGOption
 };
 //---------------------------------------------------------------------------
 /**
- * JPG‘‚«‚İ
- * ƒtƒ‹ƒJƒ‰[‚Å‚Ì‘‚«‚İ‚Ì‚İ‘Î‰
- * @param storagename : o—Íƒtƒ@ƒCƒ‹–¼
- * @param mode : ƒ‚[ƒh "jpg" ‚Æ•K—v‚È‚çˆ³k—¦‚ğ”’l‚ÅŒã‚É•t‚¯‘«‚·
- * @param image : ‘‚«o‚µƒCƒ[ƒWƒf[ƒ^
+ * JPGï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * ï¿½tï¿½ï¿½ï¿½Jï¿½ï¿½ï¿½[ï¿½Å‚Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ‚Ì‚İ‘Î‰ï¿½
+ * @param storagename : ï¿½oï¿½Íƒtï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½
+ * @param mode : ï¿½ï¿½ï¿½[ï¿½h "jpg" ï¿½Æ•Kï¿½vï¿½È‚çˆ³ï¿½kï¿½ï¿½ï¿½ğ”’lï¿½ÅŒï¿½É•tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param image : ï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Wï¿½fï¿½[ï¿½^
  */
 void TVPSaveAsJPG(void* formatdata, tTJSBinaryStream* dst, const iTVPBaseBitmap* image, const ttstr & mode, iTJSDispatch2* meta )
 {
@@ -475,7 +475,7 @@ void TVPSaveAsJPG(void* formatdata, tTJSBinaryStream* dst, const iTVPBaseBitmap*
 	}
 
 	{
-		// EnumCallback ‚ğg‚Á‚ÄƒvƒƒpƒeƒB‚ğİ’è‚·‚é
+		// EnumCallback ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Äƒvï¿½ï¿½ï¿½pï¿½eï¿½Bï¿½ï¿½İ’è‚·ï¿½ï¿½
 		struct MetaDictionaryEnumCallback : public tTJSDispatch {
 			tTVPJPGOption *opt_;
 			MetaDictionaryEnumCallback( tTVPJPGOption *opt ) : opt_(opt) {}
@@ -541,7 +541,7 @@ void TVPSaveAsJPG(void* formatdata, tTJSBinaryStream* dst, const iTVPBaseBitmap*
 		jerr.error_exit = my_error_exit;
 		jerr.output_message = my_output_message;
 		jerr.reset_error_mgr = my_reset_error_mgr;
-		// emit_message, format_message ‚ÍƒfƒtƒHƒ‹ƒg‚Ì‚ğg‚¤
+		// emit_message, format_message ï¿½Íƒfï¿½tï¿½Hï¿½ï¿½ï¿½gï¿½Ì‚ï¿½ï¿½gï¿½ï¿½
 
 		jpeg_create_compress( &cinfo );
 		
