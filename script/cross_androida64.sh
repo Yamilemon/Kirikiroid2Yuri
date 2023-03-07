@@ -9,26 +9,32 @@ TARGETS=$@
 
 function fetch_ports()
 {
-    fetch_vorbis
-    fetch_ogg
+    # audio
     fetch_opus
+    fetch_ogg
+    fetch_vorbis
     fetch_opusfile
+    fetch_oboe
+    fetch_openal
+    
+    # video
+    fetch_jpeg    
+    fetch_opencv
+    fetch_ffmpeg
+
+    # archive
     fetch_unrar
-    fetch_sdl2
     fetch_lz4
     fetch_archive
     fetch_p7zip
-    fetch_breakpad
-    fetch_ffmpeg
-    fetch_jpeg
-    fetch_syscall
+
+    # others
     fetch_oniguruma
-    fetch_openal
-    fetch_opencv
-    fetch_oboe
-    fetch_bpg
-    fetch_jxr
-    fetch_cocos2dx
+    fetch_breakpad
+
+    # framework
+    fetch_sdl2
+    fetch_cocos2dx    
 }
 
 function build_ports()
@@ -42,7 +48,7 @@ function build_ports()
     build_openal
 
     # video
-    build_jpegturbo
+    build_jpeg
     build_opencv
     build_ffmpeg
 
@@ -91,12 +97,6 @@ fi
 # config and build project
 if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
 if [ -z "$TARGETS" ]; then TARGETS=all; fi
-
-# source ./_fetch.sh
-# source ./_$PLATFORM.sh
-# fetch_ports
-# build_lz4
-# exit
 
 cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
     -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE \

@@ -120,7 +120,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     -Wl,-Bstatic
     # audio
     openal
-    onig
     ogg
     opus
     vorbis 
@@ -141,6 +140,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     7za
 
     # others
+    onig
     breakpad
     breakpad_client
     

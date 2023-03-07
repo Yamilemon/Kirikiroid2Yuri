@@ -89,7 +89,7 @@ build_openal()
 }
 
 # video
-build_jpegturbo() 
+build_jpeg() 
 {
     if ! [ -d $JPEG_SRC/build_$PLATFORM ]; then mkdir -p $JPEG_SRC/build_$PLATFORM ;fi
     
