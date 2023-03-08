@@ -96,6 +96,7 @@ android {
         debug {
             debuggable true
             jniDebuggable true
+            minifyEnabled false
             renderscriptDebuggable true
             externalNativeBuild {
                 ndkBuild {

@@ -37,7 +37,10 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 target_link_directories(${PROJECT_NAME} PUBLIC
     ${PORTBUILD_PATH}/lib
 )
-target_link_libraries(${PROJECT_NAME} PUBLIC
+target_link_libraries(${PROJECT_NAME} PUBLIC 
     -Wl,-Bstatic
-    krkr2core krkr2plugin
+    -Wl,--whole-archive # cpp_android_spec for jni function, this is important to add whole libraries !
+    cpp_android_spec krkr2plugin 
+    -Wl,--no-whole-archive
+    krkr2core 
 )

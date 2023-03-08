@@ -40,11 +40,7 @@ static bool __DumpFilter(void *data) {
 
 void cocos_android_app_init (JNIEnv* env) { // for cocos3.10+
 //	__InitAndroidDump();
-	static TVPAppDelegate *pAppDelegate = new TVPAppDelegate();
-}
-
-void cocos_android_app_init(JNIEnv* env, jobject thiz) {
-//	__InitAndroidDump();
+	__android_log_print(ANDROID_LOG_INFO,"## krkr2yuri","in cocos_android_app_init");
 	static TVPAppDelegate *pAppDelegate = new TVPAppDelegate();
 }
 

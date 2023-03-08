@@ -215,7 +215,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     ext_clipper
     ext_convertUTF
     ext_pvmp3dec
-    cpp_android_spec
     chipmunk
     BulletCollision
     BulletDynamics

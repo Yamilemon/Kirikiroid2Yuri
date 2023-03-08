@@ -10,8 +10,9 @@ local.properties
 sign.properties
 project/onsyuri_android/.gradle
 project/android/local.properties
-project/android/.idea/caches
-project/android/.idea/libraries
+project/android/.idea/caches/**
+project/android/.idea/modules/**
+project/android/.idea/libraries/**
 project/android/.idea/modules.xml
 project/android/.idea/workspace.xml
 project/android/.idea/navEditor.xml

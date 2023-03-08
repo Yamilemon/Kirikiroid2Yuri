@@ -7,15 +7,12 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.database.Cursor;
-import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,13 +22,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
-import android.provider.BaseColumns;
-import android.provider.MediaStore;
-import android.provider.MediaStore.MediaColumns;
-import android.provider.Settings.Secure;
-// import android.support.annotation.NonNull;
-// import android.support.v4.provider.DocumentFile;
-import android.telephony.TelephonyManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -45,6 +35,10 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.documentfile.provider.DocumentFile;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
@@ -61,61 +55,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.documentfile.provider.DocumentFile;
-
 /**
  * Utility class for handling the media store.
  */
+@SuppressWarnings("ALL")
 abstract class MediaStoreUtil {
-    public static Uri getUriFromFile(final String path,Context context) {
-        ContentResolver resolver = context.getContentResolver();
 
-        Cursor filecursor = resolver.query(MediaStore.Files.getContentUri("external"),
-                new String[] { BaseColumns._ID }, MediaColumns.DATA + " = ?",
-                new String[] { path }, MediaColumns.DATE_ADDED + " desc");
-        filecursor.moveToFirst();
-
-        if (filecursor.isAfterLast()) {
-            filecursor.close();
-            ContentValues values = new ContentValues();
-            values.put(MediaColumns.DATA, path);
-            return resolver.insert(MediaStore.Files.getContentUri("external"), values);
-        }
-        else {
-            @SuppressLint("Range") int imageId = filecursor.getInt(filecursor.getColumnIndex(BaseColumns._ID));
-            Uri uri = MediaStore.Files.getContentUri("external").buildUpon().appendPath(
-                    Integer.toString(imageId)).build();
-            filecursor.close();
-            return uri;
-        }
-    }
-
-    public static final void addFileToMediaStore(final String path,Context context) {
+    public static void addFileToMediaStore(final String path, Context context) {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File file = new File(path);
         Uri contentUri = Uri.fromFile(file);
         mediaScanIntent.setData(contentUri);
         context.sendBroadcast(mediaScanIntent);
     }
-
-    /**
-     * Retrieve a thumbnail of a bitmap from the mediastore.
-     *
-     * @param path
-     *            The path of the image
-     * @param maxSize
-     *            The maximum size of this bitmap (used for selecting the sample size)
-     * @return the thumbnail.
-     */
-
-    /**
-     * Delete the thumbnail of a bitmap.
-     *
-     * @param path
-     *            The path of the image
-     */
 
 }
 
@@ -251,6 +203,7 @@ class SDLInputConnection extends BaseInputConnection {
     }
 }
 
+@SuppressWarnings("ALL")
 public class KR2Activity extends Cocos2dxActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     public static final int RC_WRITE_EXTERNAL = 1;
@@ -784,19 +737,20 @@ public class KR2Activity extends Cocos2dxActivity implements ActivityCompat.OnRe
         }
     }
     
-    @Override
-    public Cocos2dxGLSurfaceView onCreateView() {
-        Cocos2dxGLSurfaceView glSurfaceView = new KR2GLSurfaceView(this);
-    	hideSystemUI();
-        // ## fix private function
-        //this line is need on some device if we specify an alpha bits
+    //@Override
+    // ## fix private function
+//    public Cocos2dxGLSurfaceView onCreateView() {
+//        Cocos2dxGLSurfaceView glSurfaceView = new KR2GLSurfaceView(this);
+//    	hideSystemUI();
+//
+//        // this line is need on some device if we specify an alpha bits
 //        if(this.mGLContextAttrs[3] > 0) glSurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 //
 //        Cocos2dxEGLConfigChooser chooser = new Cocos2dxEGLConfigChooser(this.mGLContextAttrs);
 //        glSurfaceView.setEGLConfigChooser(chooser);
-
-        return glSurfaceView;
-    }
+//
+//        return glSurfaceView;
+//    }
     
     public int get_res_sd_operate_step() { return -1; }
 
