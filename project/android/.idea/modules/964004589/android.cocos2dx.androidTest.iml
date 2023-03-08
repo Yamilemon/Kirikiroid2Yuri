@@ -31,6 +31,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: D" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: D (1)" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: D (2)" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: D (3)" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="android.cocos2dx.main" />
 </module>

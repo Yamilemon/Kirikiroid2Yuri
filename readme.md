@@ -31,7 +31,7 @@ I add some futures by reverse engine before, and now this project can be build f
 
 ### (1) prepare  
 
-- wget, git, make, cmake  
+- wget, 7z, git, make, cmake  
 - python2(for cocos2d-x v3), msys2 (if windows)  
 - thirdparty depedency (see `_fetch.sh` in detail)  
 

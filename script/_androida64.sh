@@ -153,7 +153,7 @@ build_ffmpeg()
         --arch=aarch64 --target-os=android --enable-pic --disable-asm \
         --enable-static --enable-shared --enable-small --enable-swscale \
         --disable-ffmpeg --disable-ffplay --disable-ffprobe \
-        --disable-avdevice --disable-programs --disable-doc
+        --disable-avdevice --disable-programs --disable-doc --enable-stripping
 
     # use sh directory is not available in windows (absolute path), must use msys2 shell
     make -j$CORE_NUM &&  make install
@@ -266,10 +266,10 @@ build_breakpad() # after linux-syscall
     pushd $BREAKPAD_SRC/build_$PLATFORM
     ../configure --host=aarch64-linux-android \
         CC=aarch64-linux-android21-clang  AR=llvm-ar \
-        CXX=aarch64-linux-android21-clang++ \
+        CXX=aarch64-linux-android21-clang++ STRIP=llvm-strip \
         --prefix=$PORTBUILD_PATH \
         --disable-tools
-    make -j$CORE_NUM &&  make install
+    make -j$CORE_NUM &&  make install-strip
     popd
 }
 

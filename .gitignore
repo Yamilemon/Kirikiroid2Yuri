@@ -1,4 +1,5 @@
 # general
+assets/**
 build/**
 build_*/**
 thirdparty/build/**
@@ -17,7 +18,6 @@ project/android/.idea/navEditor.xml
 project/android/.idea/assetWizardSettings.xml
 project/android/.idea/deploymentTargetDropDown.xml
 project/android/.idea/inspectionProfiles
-project/android/app/cpp/thirdparty/**
 project/android/app/.cxx/**
 project/android/app/debug/**
 project/android/app/release/**

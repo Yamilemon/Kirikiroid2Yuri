@@ -325,31 +325,12 @@ public class KR2Activity extends Cocos2dxActivity implements ActivityCompat.OnRe
     }
 
 
-    static public String getDeviceId() {
-		TelephonyManager mgr = (TelephonyManager)GetInstance().getSystemService(Context.TELEPHONY_SERVICE);
-		String DeviceID = mgr.getDeviceId();
-		if(DeviceID != null) {
-		    return "DevID:" + DeviceID;
-		}
-		String androidId = Secure.getString(GetInstance().getContentResolver(), Secure.ANDROID_ID);
-    	if (null != androidId && androidId.length() > 8 &&
-    			(!"9774d56d682e549c".equals(androidId)) ) {
-    		return "AndroidID:" + androidId;
-    	} else if(null != android.os.Build.SERIAL && android.os.Build.SERIAL.length() > 3) {
-    		return "AndroidID:" + android.os.Build.SERIAL;
-    	}
+    static public String getDeviceId() { // ## fix android.permission.READ_PRIVILEGED_PHONE_STATE
 		return "";
 	}
 
 	static public KR2Activity sInstance;
 	static public KR2Activity GetInstance() {return sInstance;}
-
-    static {
-	//	System.loadLibrary("ffmpeg");
-	//	System.loadLibrary("game");
-        System.loadLibrary("openal");
-        System.loadLibrary("hidapi");
-    }
     
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -807,11 +788,12 @@ public class KR2Activity extends Cocos2dxActivity implements ActivityCompat.OnRe
     public Cocos2dxGLSurfaceView onCreateView() {
         Cocos2dxGLSurfaceView glSurfaceView = new KR2GLSurfaceView(this);
     	hideSystemUI();
+        // ## fix private function
         //this line is need on some device if we specify an alpha bits
-        if(this.mGLContextAttrs[3] > 0) glSurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
-
-        Cocos2dxEGLConfigChooser chooser = new Cocos2dxEGLConfigChooser(this.mGLContextAttrs);
-        glSurfaceView.setEGLConfigChooser(chooser);
+//        if(this.mGLContextAttrs[3] > 0) glSurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+//
+//        Cocos2dxEGLConfigChooser chooser = new Cocos2dxEGLConfigChooser(this.mGLContextAttrs);
+//        glSurfaceView.setEGLConfigChooser(chooser);
 
         return glSurfaceView;
     }

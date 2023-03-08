@@ -17,12 +17,20 @@
     <output url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/intermediates/javac/debug/classes" />
     <output-test url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/intermediates/javac/debugUnitTest/classes" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/aidl_source_output_dir/debug/out" />
-    <content url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/ap_generated_sources/debug/out" />
+    <content url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/aidl_source_output_dir/debug/out">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/aidl_source_output_dir/debug/out" isTestSource="false" generated="true" />
+    </content>
+    <content url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/ap_generated_sources/debug/out">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/ap_generated_sources/debug/out" isTestSource="false" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/renderscript_source_output_dir/debug/out" />
-    <content url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/res/resValues/debug" />
+    <content url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/res/resValues/debug">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/res/resValues/debug" type="java-resource" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/res/rs/debug" />
-    <content url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/source/buildConfig/debug" />
+    <content url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/source/buildConfig/debug">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/build_android/generated/source/buildConfig/debug" isTestSource="false" generated="true" />
+    </content>
     <content url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/cocos/platform/android/java">
       <sourceFolder url="file://$MODULE_DIR$/../../../../../thirdparty/port/cocos2d-x/cocos/platform/android/java/src" isTestSource="false" />
     </content>
@@ -34,5 +42,6 @@
     <orderEntry type="library" name="Gradle: D" level="project" />
     <orderEntry type="library" name="Gradle: D (1)" level="project" />
     <orderEntry type="library" name="Gradle: D (2)" level="project" />
+    <orderEntry type="library" name="Gradle: D (3)" level="project" />
   </component>
 </module>
