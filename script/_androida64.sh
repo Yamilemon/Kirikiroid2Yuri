@@ -220,7 +220,7 @@ build_p7zip()
 {
     if ! [ -d $P7ZIP_SRC/build_$PLATFORM ]; then mkdir -p $P7ZIP_SRC/build_$PLATFORM ;fi
     cp -rf $CMAKELISTS_PATH/thirdparty/patch/p7zip/7z* $P7ZIP_SRC/C
-    cp -rf $CMAKELISTS_PATH/thirdparty/patch/p7zip/android_7z.cmake $P7ZIP_SRC/CPP/ANDROID/7za/jni/CMakeLists.txt
+    cp -rf $CMAKELISTS_PATH/thirdparty/patch/p7zip/android_p7zip.cmake $P7ZIP_SRC/CPP/ANDROID/7za/jni/CMakeLists.txt
 
     pushd $P7ZIP_SRC/build_$PLATFORM
     cmake ../CPP/ANDROID/7za/jni -G "Unix Makefiles" \
@@ -295,6 +295,10 @@ build_cocos2dx()
     if ! [ -d $COCOS2DX_SRC/platform/build_$PLATFORM ]; then mkdir -p $COCOS2DX_SRC/build_$PLATFORM ;fi
     cp $CMAKELISTS_PATH/thirdparty/patch/cocos2d-x/android_cocos2dx.cmake $COCOS2DX_SRC/CMakeLists.txt
     cp $CMAKELISTS_PATH/thirdparty/patch/cocos2d-x/android_CCFileUtils-android.h $COCOS2DX_SRC/cocos/platform/android/CCFileUtils-android.h
+    cp $CMAKELISTS_PATH/thirdparty/patch/cocos2d-x/android_CCFileUtils-android.cpp $COCOS2DX_SRC/cocos/platform/android/CCFileUtils-android.cpp
+    cp $CMAKELISTS_PATH/thirdparty/patch/cocos2d-x/android_Java_org_cocos2dx_lib_Cocos2dxHelper.h $COCOS2DX_SRC/cocos/platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h
+    cp $CMAKELISTS_PATH/thirdparty/patch/cocos2d-x/android_Java_org_cocos2dx_lib_Cocos2dxHelper.cpp $COCOS2DX_SRC/cocos/platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.cpp
+
 
     pushd $COCOS2DX_SRC/build_$PLATFORM
     cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=MinSizeRel \

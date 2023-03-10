@@ -8,6 +8,7 @@
 #include "ui/UICheckBox.h"
 #include "Platform.h"
 #include "cocos2d/MainScene.h"
+#include "cocostudio/ActionTimeline/CSLoader.h"
 #include "ConfigManager/LocaleConfigManager.h"
 #include "platform/CCFileUtils.h"
 #include "base/CCDirector.h"
@@ -328,21 +329,34 @@ void TVPBaseFileSelectorForm::onTitleClicked(cocos2d::Ref *owner) {
 	std::vector<Widget*> cells;
 	std::vector<Button*> buttons;
 	auto func = [this](cocos2d::Ref* node) {
+        // __android_log_print(ANDROID_LOG_INFO, "## krkr2yuri", "onTitleClicked listener %p", node);
 		ListDir(static_cast<Button*>(node)->getCallbackName());
 		TVPMainScene::GetInstance()->popUIForm(nullptr, TVPMainScene::eLeaveToBottom);
 	};
+
 	for (const std::string &path : paths) {
 		CSBReader reader;
-		Widget *cell = dynamic_cast<Widget*>(reader.Load("ui/ListItem.csb"));
+		Widget *cell = static_cast<Widget*>(reader.Load("ui/ListItem.csb"));
 		Button *item = dynamic_cast<Button*>(reader.findController("item"));
+		__android_log_print(ANDROID_LOG_INFO, "## krkr2yuri",
+                            "onTitleClicked path=%s, cell=%p, item=%p, func=%p", path.c_str(), cell, item, func);
+
+		// ## fix Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x39 cocos2d::ui::LinearLayoutParameter::setGravity
+		// Widget Inherits ProtectedNode, and LayoutParameterProtocol.
+//		Widget* cell2 = new Widget();
+//		cell2->setContentSize(cell->getContentSize());
+//      cell2->addChild(item);
+		item->setContentSize(cell->getContentSize());
 		item->setCallbackName(path);
 		item->setTitleText(path);
 		item->addClickEventListener(func);
-		cells.emplace_back(cell);
+		// ## fixme, button click position error
+		cells.emplace_back(item);
 		buttons.emplace_back(item);
 	}
 	_listform = TVPListForm::create(cells);
 	_listform->show();
+
 	// march all button's text in its width
 	for (Button* btn : buttons) {
 		Size dispSize = btn->getTitleRenderer()->getContentSize();
@@ -785,11 +799,13 @@ void TVPListForm::initFromInfo(const std::vector<cocos2d::ui::Widget*> &cells) {
 	setContentSize(sceneSize);
 	CSBReader reader;
 	_root = reader.Load("ui/ListView.csb");
-	ListView* listview = static_cast<ListView*>(reader.findController("list"));
+	ListView* listview = dynamic_cast<ListView*>(reader.findController("list"));
+
 	float height = 10;
 	for (Widget* cell : cells) {
 		height += cell->getContentSize().height;
 	}
+
 	_root->setAnchorPoint(Size(0.5, 0.5));
 	_root->setPosition(sceneSize / 2);
 	sceneSize.width *= 0.8f;
@@ -800,6 +816,7 @@ void TVPListForm::initFromInfo(const std::vector<cocos2d::ui::Widget*> &cells) {
 	_root->setContentSize(sceneSize);
 	ui::Helper::doLayout(_root);
 	float width = listview->getContentSize().width;
+	int i=0;
 	for (Widget* cell : cells) {
 		Size size = cell->getContentSize();
 		size.width = width;
@@ -807,12 +824,15 @@ void TVPListForm::initFromInfo(const std::vector<cocos2d::ui::Widget*> &cells) {
 		ui::Helper::doLayout(cell);
 		listview->pushBackCustomItem(cell);
 	}
-	if (listview->getItems().back()->getBottomBoundary() < 0) {
-		listview->setClippingEnabled(true);
-	} else {
-		listview->setBounceEnabled(false);
+	if(!listview->getItems().empty()) {
+		if (listview->getItems().back()->getBottomBoundary() < 0) {
+			listview->setClippingEnabled(true);
+		} else {
+			listview->setBounceEnabled(false);
+		}
 	}
 	addChild(_root);
+	// __android_log_print(ANDROID_LOG_INFO, "## krkr2yuri", "after initFromInfo");
 }
 
 void TVPListForm::show() {
@@ -971,11 +991,20 @@ void TVPBaseFileSelectorForm::FileItemCellImpl::initFromFile(const char * filena
 					}
 				}, 1.0f, str_long_press);
 				break;
+			// ## fix scole bug
+            case Widget::TouchEventType::MOVED: {
+                auto diff = sender->getTouchMovePosition() - sender->getTouchBeganPosition();
+                if (abs(diff.x) > 5 and abs(diff.y) > 5) {
+                    sender->unschedule(str_long_press);
+                }
+                break;
+            }
 			case Widget::TouchEventType::CANCELED:
 				sender->unschedule(str_long_press);
 				break;
 			}
 		});
+	HighLight->setSwallowTouches(false);
 	}
 	BgOdd = reader.findController("bg_odd", false);
 	BgEven = reader.findController("bg_even", false);

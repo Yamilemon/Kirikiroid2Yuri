@@ -69,7 +69,7 @@ function build_ports()
 }
 
 # prepare env, tested with ndk 25.2.9519653
-if [ -n $ANDROID_HOME ]; then ANDROID_HOME=/d/Software/env/sdk/androidsdk; fi
+if [ -z "$ANDROID_HOME" ]; then ANDROID_HOME=/d/Software/env/sdk/androidsdk; fi
 NDK_HOME=$ANDROID_HOME/ndk/$(ls -A $ANDROID_HOME/ndk | tail -n 1)
 PREBUILT_DIR=$NDK_HOME/toolchains/llvm/prebuilt
 PREBUILT_DIR=$PREBUILT_DIR/$(ls -A $PREBUILT_DIR | tail -n 1)
@@ -87,7 +87,8 @@ echo "## NDK-BUILD=$NDKBUILD"
 echo "## CC=$CC"
 echo "## AR=$AR"
 
-SKIP_PORTS="yes"
+# fetch and build ports
+# SKIP_PORTS="yes"
 source ./_fetch.sh
 source ./_$PLATFORM.sh
 fetch_asset
@@ -97,23 +98,14 @@ if [ -z "$SKIP_PORTS" ]; then
 fi
 
 # config and build project
-# NO_GRADLE="yes"
-if [ -n "$NO_GRADLE" ]; then
-    if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
-    if [ -z "$TARGETS" ]; then TARGETS=all; fi
+if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
+if [ -z "$TARGETS" ]; then TARGETS=all; fi
 
-    cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
-        -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-        -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
-        -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
-        -DPORTBUILD_PATH=$PORTBUILD_PATH
-    make -C $BUILD_PATH $TARGETS -j$CORE_NUM
-    # $STRIP $BUILD_PATH/libkrkr2yuri.so
-else
-    if [ -z "$BUILD_TYPE" ]; then BUILD_TYPE=MinSizeRel; fi
-    if [ -z "$TARGETS" ]; then TARGETS=assembleRelease; fi
-    pushd ${CMAKELISTS_PATH}/src/onsyuri_android
-    echo "ANDROID_HOME=$ANDROID_HOME" 
-    chmod +x ./gradlew && ./gradlew $TARGETS --no-daemon
-    popd
-fi
+cmake -B $BUILD_PATH -S $CMAKELISTS_PATH \
+    -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
+    -DCMAKE_TOOLCHAIN_FILE=$NDK_HOME/build/cmake/android.toolchain.cmake \
+    -DANDROID_PLATFORM=21 -DANDROID_ABI=arm64-v8a \
+    -DPORTBUILD_PATH=$PORTBUILD_PATH
+make -C $BUILD_PATH $TARGETS -j$CORE_NUM
+# make -C $BUILD_PATH $TARGETS -j1
+# $STRIP $BUILD_PATH/libkrkr2yuri.so

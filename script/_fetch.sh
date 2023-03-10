@@ -168,9 +168,9 @@ function fetch_breakpad()
 function fetch_cocos2dx()
 {
     COCOS2DX_NAME=cocos2d-x
-    COCOS2DX_VERSION=v3
+    COCOS2DX_VERSION=cocos2d-x-3.17.2
     COCOS2DX_SRC=$CMAKELISTS_PATH/thirdparty/port/$COCOS2DX_NAME
-    fetch_port2 https://github.com/cocos2d $COCOS2DX_NAME
+    fetch_port2 https://github.com/cocos2d $COCOS2DX_NAME $COCOS2DX_VERSION
 
     if ! [ -d "$CMAKELISTS_PATH/thirdparty/port/$COCOS2DX_NAME" ]; then    
         pushd $COCOS2DX_SRC

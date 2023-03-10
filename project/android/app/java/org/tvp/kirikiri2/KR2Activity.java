@@ -7,12 +7,14 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +24,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.storage.StorageManager;
 import android.preference.PreferenceManager;
+import android.provider.BaseColumns;
+import android.provider.MediaStore;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -60,6 +64,27 @@ import java.util.Locale;
  */
 @SuppressWarnings("ALL")
 abstract class MediaStoreUtil {
+    public static Uri getUriFromFile(final String path,Context context) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor filecursor = resolver.query(MediaStore.Files.getContentUri("external"),
+                new String[] { BaseColumns._ID }, MediaStore.MediaColumns.DATA + " = ?",
+                new String[] { path }, MediaStore.MediaColumns.DATE_ADDED + " desc");
+        filecursor.moveToFirst();
+
+        if (filecursor.isAfterLast()) {
+            filecursor.close();
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.MediaColumns.DATA, path);
+            return resolver.insert(MediaStore.Files.getContentUri("external"), values);
+        }
+        else {
+            int imageId = filecursor.getInt(filecursor.getColumnIndex(BaseColumns._ID));
+            Uri uri = MediaStore.Files.getContentUri("external").buildUpon().appendPath(
+                    Integer.toString(imageId)).build();
+            filecursor.close();
+            return uri;
+        }
+    }
 
     public static void addFileToMediaStore(final String path, Context context) {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -99,15 +124,6 @@ class DummyEdit extends View implements View.OnKeyListener {
             }
             return true;
         }
-
-//        if (event.getAction() == KeyEvent.ACTION_DOWN) {
-//        	KR2Activity.nativeKeyAction(keyCode, true);
-//            return true;
-//        } else if (event.getAction() == KeyEvent.ACTION_UP) {
-//        	KR2Activity.nativeKeyAction(keyCode, false);
-//            return true;
-//        }
-
         return false;
     }
         
@@ -290,7 +306,7 @@ public class KR2Activity extends Cocos2dxActivity implements ActivityCompat.OnRe
 		sInstance = this;
         Sp = PreferenceManager.getDefaultSharedPreferences(this);
 		super.onCreate(savedInstanceState);
-		/*
+	
 		if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP) {
 			for(String path : getExtSdCardPaths(this)) {
 		        if (!isWritableNormalOrSaf(path)) {
@@ -298,7 +314,7 @@ public class KR2Activity extends Cocos2dxActivity implements ActivityCompat.OnRe
 		        }
 			}
 		}
-		*/
+		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestExternalWrite();
         }

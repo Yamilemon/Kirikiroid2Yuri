@@ -4,7 +4,6 @@
 
 ☘️ A krikiroid2 project matained by Yurisizuku.  
 Support the newer android device and more format.  
-Windows or linux will also be supported (in future).
 
 New features :  
 
@@ -13,17 +12,23 @@ New features :
   - [x] well documention for develop and usage
   - [x] scripts to compile or cross compile without pain
   - [x] vscode and android studio project for multi enviroment
-  - [ ] ci in github action to automaticly build
+  - [x] ci in github action to automaticly build
 - platform
   - android
     - [x] SDK level above 21 (android 5.1, Lolipop)
-    - [ ] SAF to access extern sdcard
+    - [x] bypass scoped storage
+    - [ ] access extern sdcard by saf
   - windows
   - linux
 - render  
 - game support
+  - [ ] recent krkr game decryption support
 
-## 1. usage
+(This project is heavily relying on cocos. As I am not familiar with cocos, I am looking forward for your contribute to improve this project)
+
+## 1. usage  
+
+Although now the apk build from source is runable, it is not perfect. Beta version has some problems due to the cocos version change, incomplecate of some code. Currently the beta version is only aimed for debug. Please use [Kirikiroid2_yuri_1.3.9.apk](https://github.com/YuriSizuku/Kirikiroid2Yuri/releases/download/1.3.9_yuri/Kirikiroid2_yuri_1.3.9.apk) instead.  
 
 ## 2. Build  
 
@@ -60,14 +65,15 @@ https://github.com/cocos2d/cocos2d-x/archive/refs/tags/cocos2d-x-3.17.2.tar.gz
 ```
 
 In windows, you must use msys2 to build ffmpeg port.  
+You can also download the prebuild ports from [thirdparty_ports.tar.gz](https://github.com/YuriSizuku/Kirikiroid2Yuri/releases/download/deps/thirdparty_ports.tar.gz"), [thirdparty_build.tar.gz](https://github.com/YuriSizuku/Kirikiroid2Yuri/releases/download/deps/thirdparty_build.tar.gz).  
 
 ## (2) android  
 
 - android sdk with `ANDROID_HOME` variable in env  
 - android ndk 25.2.9519653  
 
-Use `cross_android64.sh` to build.  
 See `_androida64.sh` for how to build dependencies.
+Use `script/cross_android64.sh` to build ports and the use `project/android/gradlew assembleDebug` to build apk.
 
 ## 3. Compatibility  
 
@@ -75,6 +81,14 @@ See `_androida64.sh` for how to build dependencies.
 |----|-------|------|-----------|
 
 ## 4. Issues (including solved)
+
+(build from souce, beta version)  
+
+- title path button click position is not correct
+- crash in game menu form  
+- game alert window button can not click  
+- member GdiPlus does not exist
+- global preference can not save
 
 ## 5. Todo
 

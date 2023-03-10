@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.6)
 project(krkr2yuri)
 
-option(PORTBUILD_PATH "use this value for thirdparty sysroot")
 set(CMAKE_CXX_STANDARD 11)
 set(KRKR2CORE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/core)
 set(KRKR2PLUGIN_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/plugins)

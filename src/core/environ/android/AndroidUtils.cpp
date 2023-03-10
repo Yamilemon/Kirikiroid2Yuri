@@ -218,7 +218,7 @@ public:
             TVPThrowExceptionMessage(msg.c_str());
             return false;
         }
-        // UTF8¤Ê¥Õ¥¡¥¤¥ëÃû¤«¤É¤¦¤«¤ÎÅÐ¶¨¡£×î³õ¤Î¥Õ¥¡¥¤¥ë¤Ç›Q¤á¤ë
+        // UTF8ï¿½Ê¥Õ¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¤ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¥Õ¥ï¿½ï¿½ï¿½ï¿½ï¿½Ç›Qï¿½ï¿½ï¿½
         unzGoToFirstFile(uf);
         unz_file_info file_info;
         if (unzGetCurrentFileInfo(uf, &file_info, NULL, 0, NULL, 0, NULL, 0) == UNZ_OK) {
@@ -663,6 +663,7 @@ bool TVPCheckStartupPath(const std::string &path) {
 		jstring jstrPath = methodInfo.env->NewStringUTF(testPath.c_str());
 		success = methodInfo.env->CallStaticBooleanMethod(methodInfo.classID, methodInfo.methodID, jstrPath);
 		methodInfo.env->DeleteLocalRef(jstrPath);
+		TVPDeleteFile(testPath.c_str());
 #if 0
 		if (success) {
 			parent += "/savedata";

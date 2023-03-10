@@ -42,7 +42,6 @@ file(GLOB KRKR2CORE_CODE
     ${KRKR2CORE_PATH}/environ/*.cpp
     ${KRKR2CORE_PATH}/environ/ConfigManager/*.cpp
     ${KRKR2CORE_PATH}/environ/cocos2d/*.cpp
-    ${KRKR2CORE_PATH}/environ/android/*.cpp
     ${KRKR2CORE_PATH}/environ/linux/*.cpp
     ${KRKR2CORE_PATH}/environ/ui/*.cpp
     ${KRKR2CORE_PATH}/environ/ui/extension/*.cpp
@@ -67,7 +66,8 @@ file(GLOB KRKR2CORE_CODE
     ${KRKR2CORE_PATH}/visual/win32/*.cpp
 )
 
-file(GLOB KRKR2CORE_CODEARM
+file(GLOB KRKR2CORE_CODEANDROID
+    ${KRKR2CORE_PATH}/environ/android/*.cpp
     ${KRKR2CORE_PATH}/sound/ARM/*.c
     ${KRKR2CORE_PATH}/sound/ARM/*.cpp
     ${KRKR2CORE_PATH}/visual/ARM/*.cpp
@@ -92,7 +92,7 @@ list(REMOVE_ITEM KRKR2CORE_CODE
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Android")
-    list(APPEND KRKR2CORE_CODE ${KRKR2CORE_CODEARM})
+    list(APPEND KRKR2CORE_CODE ${KRKR2CORE_CODEANDROID})
     set(PLATFORM android)
 elseif(CMAKE_SYSTEM_NAME MATCHES "Linux")
     set(PLATFORM linux)

@@ -13,41 +13,13 @@
 #define ZEXPORT
 
 //using namespace cocos2d;
-// ## add missing sturctures
-typedef uint64_t ZPOS64_T;
-typedef struct tm_unz_s
-{
-    uInt tm_sec;            /* seconds after the minute - [0,59] */
-    uInt tm_min;            /* minutes after the hour - [0,59] */
-    uInt tm_hour;           /* hours since midnight - [0,23] */
-    uInt tm_mday;           /* day of the month - [1,31] */
-    uInt tm_mon;            /* months since January - [0,11] */
-    uInt tm_year;           /* years - [1980..2044] */
-} tm_unz;
-
-/* unz_global_info structure contain global data about the ZIPfile
-   These data comes from the end of central dir */
-typedef struct unz_global_info64_s
-{
-    ZPOS64_T number_entry;         /* total number of entries in
-                                     the central dir on this disk */
-    uLong size_comment;         /* size of the global comment of the zipfile */
-} unz_global_info64;
-
-typedef struct unz_global_info_s
-{
-    uLong number_entry;         /* total number of entries in
-                                     the central dir on this disk */
-    uLong size_comment;         /* size of the global comment of the zipfile */
-} unz_global_info;
-
-// typedef cocos2d::ZPOS64_T ZPOS64_T;
-// typedef cocos2d::zlib_filefunc64_32_def zlib_filefunc64_32_def;
-// typedef cocos2d::unz_global_info64 unz_global_info64;
-// typedef cocos2d::zlib_filefunc_def zlib_filefunc_def;
-// typedef cocos2d::zlib_filefunc64_def zlib_filefunc64_def;
-// typedef cocos2d::unz_global_info unz_global_info;
-// typedef cocos2d::tm_unz tm_unz;
+typedef cocos2d::ZPOS64_T ZPOS64_T;
+typedef cocos2d::zlib_filefunc64_32_def zlib_filefunc64_32_def;
+typedef cocos2d::unz_global_info64 unz_global_info64;
+typedef cocos2d::zlib_filefunc_def zlib_filefunc_def;
+typedef cocos2d::zlib_filefunc64_def zlib_filefunc64_def;
+typedef cocos2d::unz_global_info unz_global_info;
+typedef cocos2d::tm_unz tm_unz;
 typedef struct unz_file_info_s
 {
 	uLong version;              /* version made by                 2 bytes */
@@ -224,8 +196,8 @@ static voidpf zip_open64file(voidpf opaque, const void * filename, int mode) {
 	return nullptr;
 }
 
-static uint32_t zip_readfile(voidpf, voidpf s, void *buf, uint32_t size);
-static uint32_t zip_writefile(voidpf, voidpf s, const void *buf, uint32_t size);
+static uLong zip_readfile(voidpf, voidpf s, void *buf, uLong size);
+static uLong zip_writefile(voidpf, voidpf s, const void *buf, uLong size);
 static ZPOS64_T zip_tell64file(voidpf, voidpf s);
 static long zip_seek64file(voidpf, voidpf s, ZPOS64_T offset, int origin);
 
@@ -237,7 +209,6 @@ static int zip_closefile(voidpf, voidpf s) {
 static zlib_filefunc64_32_def zipfunc = {
 	{
 		zip_open64file,
-        nullptr,
 		zip_readfile,
 		zip_writefile,
 		zip_tell64file,
@@ -246,7 +217,6 @@ static zlib_filefunc64_32_def zipfunc = {
 		nullptr,
 		nullptr
 	},
-    nullptr,
 	nullptr,
 	nullptr,
 	nullptr
@@ -2088,11 +2058,11 @@ public:
 	tTJSBinaryStream *_st = nullptr;
 };
 
-static uint32_t zip_readfile(voidpf, voidpf s, void *buf, uint32_t size) {
+static uLong zip_readfile(voidpf, voidpf s, void *buf, uLong size) {
 	return ((ZipArchive*)s)->_st->Read(buf, size);
 }
 
-static uint32_t zip_writefile(voidpf, voidpf s, const void *buf, uint32_t size) {
+static uLong zip_writefile(voidpf, voidpf s, const void *buf, uLong size) {
 	return ((ZipArchive*)s)->_st->Write(buf, size);
 }
 
@@ -2179,4 +2149,3 @@ ZipArchive::ZipArchive(const ttstr & name, tTJSBinaryStream *st, bool normalizeF
 		}
 	}
 }
-
