@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.7)
+project(krkr2yuri_android)
 
 set(KRKR2YURI_DIR ${CMAKE_SOURCE_DIR}/../../../..)
 if(${ANDROID_ABI} MATCHES "arm64-v8a")

@@ -1,3 +1,18 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
 include ':cocos2dx'
 project(':cocos2dx').projectDir = new File(settingsDir, '../../thirdparty/port/cocos2d-x/cocos/platform/android/libcocos2dx')
 include ':krkr2yuri'

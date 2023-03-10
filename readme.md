@@ -1,6 +1,6 @@
 # Krikiroid2-Yuri  
 
-![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/YuriSizuku/Kirikiroid2Yuri?color=green&label=krkr2yuri&style=flat-square)  
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/YuriSizuku/Kirikiroid2Yuri?color=green&label=krkr2yuri&style=flat-square7&logo=4chan)  ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/YuriSizuku/Kirikiroid2Yuri/build_android.yml?label=android%28aarch64%29&style=flat-square)
 
 ☘️ A krikiroid2 project matained by Yurisizuku.  
 Support the newer android device and more format.  
@@ -84,11 +84,17 @@ Use `script/cross_android64.sh` to build ports and the use `project/android/grad
 
 (build from souce, beta version)  
 
+major:  
+
 - title path button click position is not correct
 - crash in game menu form  
 - game alert window button can not click  
 - member GdiPlus does not exist
 - global preference can not save
+
+minor:  
+
+- android studio buildDir not worked and it make dir at root
 
 ## 5. Todo
 

@@ -17,6 +17,11 @@ android {
         targetSdkVersion PROP_TARGET_SDK_VERSION
         minSdkVersion PROP_MIN_SDK_VERSION
 
+        ndk {
+            abiFilters = []
+            abiFilters.addAll(PROP_APP_ABI.split(':').collect{it as String})
+        }
+
         externalNativeBuild {
             if (PROP_BUILD_TYPE == 'cmake') {
                 cmake {
@@ -27,38 +32,11 @@ android {
                 }
             }
         }
-
-        ndk {
-            abiFilters = []
-            abiFilters.addAll(PROP_APP_ABI.split(':').collect{it as String})
-        }
         versionCode 1
         versionName "1.4.0beta"
     }
-
-    sourceSets.main {
-        java.srcDir "java"
-        res.srcDir "res"
-        manifest.srcFile "AndroidManifest.xml"
-        assets.srcDir "../../../assets"
-    }
-
-    externalNativeBuild {
-        if (PROP_BUILD_TYPE == 'cmake') {
-            cmake {
-                path "cpp/CMakeLists.txt"
-            }
-        }
-    }
-
-    android.applicationVariants.all { variant ->
-        variant.outputs.all {
-            outputFileName = "krkr2yuri[${applicationId}]_v${defaultConfig.versionName}.apk"
-        }
-    }
-
     signingConfigs {
-       release {
+        release {
             storeFile file('sign.jks')
             def signPropsFile = file('sign.properties')
             if (signPropsFile.exists()) {
@@ -75,7 +53,6 @@ android {
             }
         }
     }
-
     buildTypes {
         release {
             debuggable false
@@ -94,10 +71,33 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    sourceSets{
+        main{
+            manifest.srcFile "AndroidManifest.xml"
+            java.srcDirs = ["java"]
+            res.srcDirs = ["res"]
+            assets.srcDirs =["../../../assets"]
+        }
+
+    }
+
+    externalNativeBuild {
+        cmake {
+            version '3.22.1'
+            path "cpp/CMakeLists.txt"
+        }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "krkr2yuri_v${defaultConfig.versionName}.apk"
+        }
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    //implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':cocos2dx')
 
     implementation "androidx.documentfile:documentfile:1.0.1"
