@@ -94,7 +94,7 @@ major:
 
 minor:  
 
-- android studio buildDir not worked and it make dir at root
+- ~~android studio buildDir not worked and it make dir at root~~ fixed by cmake `add_subdirectory` build dir
 
 ## 5. Todo
 
